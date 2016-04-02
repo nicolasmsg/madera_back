@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,7 @@ namespace ConceptionDevisWS.Models
         [StringLength(50)]
         public string Nom { get; set; }
         public double Longueur { get; set; }
+        public List<Module> Modules { get; set; }
 
         [Column("Angle")]
         [JsonIgnore]

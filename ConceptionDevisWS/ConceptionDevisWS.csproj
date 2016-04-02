@@ -102,6 +102,10 @@
     <Compile Include="Migrations\201604021911208_Initial.Designer.cs">
       <DependentUpon>201604021911208_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604021941130_ManyToManyRel_Module_Composant.cs" />
+    <Compile Include="Migrations\201604021941130_ManyToManyRel_Module_Composant.Designer.cs">
+      <DependentUpon>201604021941130_ManyToManyRel_Module_Composant.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Composant.cs" />
     <Compile Include="Models\EAngle.cs" />
@@ -125,6 +129,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201604021911208_Initial.resx">
       <DependentUpon>201604021911208_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604021941130_ManyToManyRel_Module_Composant.resx">
+      <DependentUpon>201604021941130_ManyToManyRel_Module_Composant.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

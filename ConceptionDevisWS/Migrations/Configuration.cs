@@ -1,9 +1,8 @@
 namespace ConceptionDevisWS.Migrations
 {
-    using System;
-    using System.Data.Entity;
+    using Models;
+    using System.Collections.Generic;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<ConceptionDevisWS.Models.ModelsDBContext>
     {
@@ -14,18 +13,13 @@ namespace ConceptionDevisWS.Migrations
 
         protected override void Seed(ConceptionDevisWS.Models.ModelsDBContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            Composant sectionDroite = new Composant { Id = 1, Nom = "Section droite", Longueur = 4.0, AngleStr = "Droit", Referrence = "COMP-1" };
+            Composant sectionFinale = new Composant { Id = 2, Nom = "Section finale", Longueur = 4.0, AngleStr = "Droit", Referrence = "COMP-2" };
+            Composant sectionPaloise = new Composant { Id = 3, Nom = "Section paloise", Longueur = 4.0, AngleStr = "Droit", Referrence = "COMP-3"  };
+            Module murN1 = new Module { Id = 1, Reference = "MOD-1", Nom = "Mur Nord 1", Composants = new List<Composant> { sectionDroite, sectionFinale } };
+            Module murS1 = new Module { Id = 2, Reference = "MOD-2", Nom = "Mur Sud 1", Composants = new List<Composant> { sectionFinale, sectionPaloise } };
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.Modules.AddRange(new List<Module> { murN1, murS1 });
         }
     }
 }
