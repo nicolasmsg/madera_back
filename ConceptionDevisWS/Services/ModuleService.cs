@@ -93,33 +93,5 @@ namespace ConceptionDevisWS.Services
         {
             return ((ModelsDBContext)context).Components;
         }
-
-        private static async Task EnsuresNoNewComponents(Module newModule, ModelsDBContext ctx)
-        {
-            List<Composant> newComps = new List<Composant>();
-
-            foreach (Composant newComp in newModule.Composants)
-            {
-                if (await ctx.Components.FirstOrDefaultAsync(comp => comp.Id == newComp.Id) == null)
-                {
-                    newComps.Add(newComp);
-                }
-            }
-
-            if (newComps.Count > 0)
-            {
-                string errorMsg = string.Format("Following entities have not been found: {0}", string.Concat(newComps.ConvertAll(c => c.Id)));
-                throw new HttpResponseException(new HttpResponseMessage { StatusCode = HttpStatusCode.NotFound, Content = new StringContent(errorMsg) });
-            }
-        }
-
-        private static async Task AddAllComponentsFromContext(Module srcModule, Module destModule, ModelsDBContext ctx)
-        {
-            foreach (Composant newComp in srcModule.Composants)
-            {
-                Composant trackedNewComp = await ctx.Components.FindAsync(newComp.Id);
-                destModule.Composants.Add(trackedNewComp);
-            }
-        }
     }
 }
