@@ -46,12 +46,9 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                await ServiceHelper<Module>.EnsuresNoNewElement<Composant>(newModule, getComposants, ctx, getContextComponents);
+                await ServiceHelper<Module>.InitNavigationProperty<Composant>(newModule, ctx, getComposants, getContextComponents);
                 ctx.Modules.Add(newModule);
-                foreach(Composant comp in newModule.Composants)
-                {
-                    ctx.Entry(comp).State = EntityState.Unchanged;
-                }
+                
                 await ctx.SaveChangesAsync();
                 return newModule;
             }

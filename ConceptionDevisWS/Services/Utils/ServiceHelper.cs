@@ -15,17 +15,35 @@ namespace ConceptionDevisWS.Services.Utils
     {
         public async static Task UpdateNavigationProperty<T2>(T src, T dest, DbContext context, 
             Func<T, ICollection<T2>> getCollection, 
-            Func<DbContext, DbSet<T2>> getCtxCollection) where T2 : class, IIdentifiable
+            Func<DbContext, DbSet<T2>> getCtxCollection) 
+            where T2 : class, IIdentifiable
         {
             await EnsuresNoNewElement<T2>(src, getCollection, context, getCtxCollection);
             getCollection(dest).Clear();
             await AddAllElementsFromContext(src, dest, context, getCollection, getCtxCollection);
         }
 
-        public async static Task EnsuresNoNewElement<T2>(T src, 
+        public async static Task InitNavigationProperty<T2>(T src, DbContext context,
+            Func<T, ICollection<T2>> getCollection, Func<DbContext, DbSet<T2>> getCtxCollection) 
+            where T2 : class, IIdentifiable
+        {
+            await EnsuresNoNewElement<T2>(src, getCollection, context, getCtxCollection);
+            ICollection<T2> elements = new List<T2>(getCollection(src));
+            getCollection(src).Clear();
+            
+            foreach (T2 element in elements)
+            {
+                T2 trackedElement = await getCtxCollection(context).FindAsync(element.Id);
+                context.Entry(trackedElement).State = EntityState.Unchanged;
+                getCollection(src).Add(trackedElement);
+            }
+        }
+            
+        private async static Task EnsuresNoNewElement<T2>(T src, 
             Func<T, ICollection<T2>> getCollection, 
             DbContext context, Func<DbContext, DbSet<T2>> getCtxCollection
-        ) where T2 : class, IIdentifiable
+        ) 
+            where T2 : class, IIdentifiable
         {
             List<T2> newElements = new List<T2>();
 
@@ -48,7 +66,8 @@ namespace ConceptionDevisWS.Services.Utils
         }
 
         private async static Task AddAllElementsFromContext<T2>(T src, T dest, DbContext context,
-            Func<T,ICollection<T2>> getCollection, Func<DbContext, DbSet<T2>> getCtxCollection) where T2 : class, IIdentifiable
+            Func<T,ICollection<T2>> getCollection, Func<DbContext, DbSet<T2>> getCtxCollection) 
+            where T2 : class, IIdentifiable
         {
             foreach (T2 element in getCollection(src))
             {
