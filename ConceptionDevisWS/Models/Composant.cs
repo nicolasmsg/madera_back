@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace ConceptionDevisWS.Models
 {
-    public class Composant
+    public class Composant : IIdentifiable
     {
         private string _angleStr;
         private EAngle _angle;
@@ -17,10 +19,11 @@ namespace ConceptionDevisWS.Models
         [StringLength(50)]
         public string Nom { get; set; }
         public double Longueur { get; set; }
+        [IgnoreDataMember,XmlIgnore,JsonIgnore]
         public List<Module> Modules { get; set; }
 
         [Column("Angle")]
-        [JsonIgnore]
+        [IgnoreDataMember,XmlIgnore,JsonIgnore]
         public string AngleStr
         {
             get { return _angleStr; }

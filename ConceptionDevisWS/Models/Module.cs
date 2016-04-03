@@ -2,7 +2,7 @@
 
 namespace ConceptionDevisWS.Models
 {
-    public class Module
+    public class Module : IIdentifiable
     {
         public int Id { get; set; }
         public string Reference { get; set; }

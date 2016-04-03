@@ -22,9 +22,10 @@ namespace ConceptionDevisWS.Controllers
 
         [Route("api/modules/{id}")]
         [AcceptVerbs("DELETE")]
-        public async Task DeleteModule(int id)
+        public async Task<IHttpActionResult> DeleteModule(int id)
         {
             await ModuleService.RemoveModule(id);
+            return Ok();
         }
 
         [Route("api/modules/{id}")]
