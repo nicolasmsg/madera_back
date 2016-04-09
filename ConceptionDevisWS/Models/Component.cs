@@ -8,14 +8,18 @@ using System.Xml.Serialization;
 
 namespace ConceptionDevisWS.Models
 {
-    public class Composant : IIdentifiable
+    [Table("Composants")]
+    public class Component : IIdentifiable
     {
         private string _angleStr;
         private EAngle _angle;
 
         public int Id { get; set; }
-        [StringLength(50)]
-        public string Referrence { get; set; }
+        [StringLength(50), Index(IsUnique = true)]
+        public string Referrence
+        {
+            get { return "COMP-" + Id; }
+        }
         [StringLength(50)]
         public string Nom { get; set; }
         public double Longueur { get; set; }

@@ -10,16 +10,18 @@ namespace ConceptionDevisWS.Migrations
         {
             AutomaticMigrationsEnabled = false;
         }
+        
 
         protected override void Seed(ConceptionDevisWS.Models.ModelsDBContext context)
         {
-            Composant sectionDroite = new Composant { Id = 1, Nom = "Section droite", Longueur = 4.0, AngleStr = "Droit", Referrence = "COMP-1" };
-            Composant sectionFinale = new Composant { Id = 2, Nom = "Section finale", Longueur = 4.0, AngleStr = "Droit", Referrence = "COMP-2" };
-            Composant sectionPaloise = new Composant { Id = 3, Nom = "Section paloise", Longueur = 4.0, AngleStr = "Droit", Referrence = "COMP-3"  };
-            Module murN1 = new Module { Id = 1, Reference = "MOD-1", Nom = "Mur Nord 1", Composants = new List<Composant> { sectionDroite, sectionFinale } };
-            Module murS1 = new Module { Id = 2, Reference = "MOD-2", Nom = "Mur Sud 1", Composants = new List<Composant> { sectionFinale, sectionPaloise } };
+            Component sectionDroite = new Component { Id = 1, Nom = "Section droite", Longueur = 4.0, AngleStr = "Droit" };
+            Component sectionFinale = new Component { Id = 2, Nom = "Section finale", Longueur = 4.0, AngleStr = "Droit" };
+            Component sectionPaloise = new Component { Id = 3, Nom = "Section paloise", Longueur = 4.0, AngleStr = "Droit"  };
+            Module murN1 = new Module { Id = 1, Nom = "Mur Nord 1", Components = new List<Component> { sectionDroite, sectionFinale } };
+            Module murS1 = new Module { Id = 2, Nom = "Mur Sud 1", Components = new List<Component> { sectionFinale, sectionPaloise } };
 
             context.Modules.AddRange(new List<Module> { murN1, murS1 });
         }
+
     }
 }

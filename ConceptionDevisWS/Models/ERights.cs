@@ -1,6 +1,7 @@
 ﻿namespace ConceptionDevisWS.Models
 {
-    public enum EEtatProjet
+    public enum ERights
     {
+        ConceptionDevis
     }
 }
