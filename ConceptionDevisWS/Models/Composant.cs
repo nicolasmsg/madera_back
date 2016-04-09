@@ -19,7 +19,6 @@ namespace ConceptionDevisWS.Models
         [StringLength(50)]
         public string Nom { get; set; }
         public double Longueur { get; set; }
-        [IgnoreDataMember,XmlIgnore,JsonIgnore]
         public List<Module> Modules { get; set; }
 
         [Column("Angle")]
