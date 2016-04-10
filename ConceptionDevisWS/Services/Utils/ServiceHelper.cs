@@ -17,7 +17,11 @@ namespace ConceptionDevisWS.Services.Utils
             where T2 : class, IIdentifiable
         {
             await EnsuresNoNewElement<T2>(src, getCollection, context, getCtxCollection);
-            getCollection(dest).Clear();
+            ICollection<T2> destElements = getCollection(dest);
+            if (destElements != null)
+            {
+                destElements.Clear();
+            }
             await AddAllElementsFromContext(src, dest, context, getCollection, getCtxCollection);
         }
 
@@ -30,14 +34,21 @@ namespace ConceptionDevisWS.Services.Utils
             if (srcElements != null)
             {
                 ICollection<T2> elements = new List<T2>(srcElements);
-                getCollection(src).Clear();
-
-                foreach (T2 element in elements)
+                if (srcElements != null)
                 {
-                    T2 trackedElement = await getCtxCollection(context).FindAsync(element.Id);
-                    context.Entry(trackedElement).State = EntityState.Unchanged;
-                    getCollection(src).Add(trackedElement);
+                    srcElements.Clear();
                 }
+
+                if(elements != null)
+                {
+                    foreach (T2 element in elements)
+                    {
+                        T2 trackedElement = await getCtxCollection(context).FindAsync(element.Id);
+                        context.Entry(trackedElement).State = EntityState.Unchanged;
+                        srcElements.Add(trackedElement);
+                    }
+                }
+                
             }
         }
             
@@ -52,7 +63,7 @@ namespace ConceptionDevisWS.Services.Utils
             ICollection<T2> srcElements = getCollection(src);
             DbSet<T2> contextElements = getCtxCollection(context);
 
-            if (srcElements != null)
+            if (srcElements != null && contextElements != null)
             {
                 foreach (T2 srcElement in srcElements)
                 {
@@ -74,10 +85,22 @@ namespace ConceptionDevisWS.Services.Utils
             Func<T,ICollection<T2>> getCollection, Func<DbContext, DbSet<T2>> getCtxCollection) 
             where T2 : class, IIdentifiable
         {
-            foreach (T2 element in getCollection(src))
+            ICollection<T2> srcElements = getCollection(src);
+            ICollection<T2> destElements = getCollection(dest);
+
+            if (destElements == null)
             {
-                T2 trackedElement = await getCtxCollection(context).FindAsync(element.Id);
-                getCollection(dest).Add(trackedElement);
+                destElements = new List<T2>();
+            }
+
+            if (srcElements != null)
+            {
+
+                foreach (T2 element in srcElements)
+                {
+                    T2 trackedElement = await getCtxCollection(context).FindAsync(element.Id);
+                    destElements.Add(trackedElement);
+                }
             }
         }
         
