@@ -13,7 +13,8 @@ namespace ConceptionDevisWS.Models
         {
             get { return "MOD-" + Id; }
         }
-        public string Nom { get; set; }
+        [Column("Nom")]
+        public string Name { get; set; }
         public List<Component> Components { get; set; }
     }
 }

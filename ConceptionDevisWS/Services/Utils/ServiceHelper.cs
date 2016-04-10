@@ -1,13 +1,11 @@
-﻿using System;
+﻿using ConceptionDevisWS.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Net.Http;
 using System.Net;
-using ConceptionDevisWS.Models;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace ConceptionDevisWS.Services.Utils
 {
@@ -28,14 +26,18 @@ namespace ConceptionDevisWS.Services.Utils
             where T2 : class, IIdentifiable
         {
             await EnsuresNoNewElement<T2>(src, getCollection, context, getCtxCollection);
-            ICollection<T2> elements = new List<T2>(getCollection(src));
-            getCollection(src).Clear();
-            
-            foreach (T2 element in elements)
+            ICollection<T2> srcElements = getCollection(src);
+            if (srcElements != null)
             {
-                T2 trackedElement = await getCtxCollection(context).FindAsync(element.Id);
-                context.Entry(trackedElement).State = EntityState.Unchanged;
-                getCollection(src).Add(trackedElement);
+                ICollection<T2> elements = new List<T2>(srcElements);
+                getCollection(src).Clear();
+
+                foreach (T2 element in elements)
+                {
+                    T2 trackedElement = await getCtxCollection(context).FindAsync(element.Id);
+                    context.Entry(trackedElement).State = EntityState.Unchanged;
+                    getCollection(src).Add(trackedElement);
+                }
             }
         }
             
@@ -50,11 +52,14 @@ namespace ConceptionDevisWS.Services.Utils
             ICollection<T2> srcElements = getCollection(src);
             DbSet<T2> contextElements = getCtxCollection(context);
 
-            foreach(T2 srcElement in srcElements)
+            if (srcElements != null)
             {
-                if(await contextElements.FirstOrDefaultAsync( contextElement => contextElement.Id == srcElement.Id  ) == null)
+                foreach (T2 srcElement in srcElements)
                 {
-                    newElements.Add(srcElement);
+                    if (await contextElements.FirstOrDefaultAsync(contextElement => contextElement.Id == srcElement.Id) == null)
+                    {
+                        newElements.Add(srcElement);
+                    }
                 }
             }
 

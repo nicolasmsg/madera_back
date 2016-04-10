@@ -2,17 +2,18 @@
 namespace ConceptionDevisWS.Migrations
 {
     using System.CodeDom.Compiler;
+    using System.Data.Entity.Migrations;
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
-
+    
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ManyToManyRel_Module_Composant : IMigrationMetadata
+    public sealed partial class RevokedTokens : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ManyToManyRel_Module_Composant));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RevokedTokens));
         
         string IMigrationMetadata.Id
         {
-            get { return "201604021941130_ManyToManyRel_Module_Composant"; }
+            get { return "201604101333066_RevokedTokens"; }
         }
         
         string IMigrationMetadata.Source

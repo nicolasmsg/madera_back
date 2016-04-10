@@ -21,8 +21,13 @@ namespace ConceptionDevisWS.Models
             get { return "COMP-" + Id; }
         }
         [StringLength(50)]
-        public string Nom { get; set; }
-        public double Longueur { get; set; }
+        [Column("Nom")]
+        public string Name { get; set; }
+        [Column("Longueur")]
+        public double Length { get; set; }
+        // prevent self referencing loop within response serialization as (module being a recursive structure with  Module.Components[i].Modules
+        //  cause troubles to serialization process)
+        [IgnoreDataMember, XmlIgnore,JsonIgnore]
         public List<Module> Modules { get; set; }
 
         [Column("Angle")]

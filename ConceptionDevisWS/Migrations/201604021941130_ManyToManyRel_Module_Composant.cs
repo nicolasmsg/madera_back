@@ -1,8 +1,7 @@
 namespace ConceptionDevisWS.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class ManyToManyRel_Module_Composant : DbMigration
     {
         public override void Up()

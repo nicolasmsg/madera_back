@@ -2,6 +2,7 @@
 {
     public enum ERights
     {
+        None,
         ConceptionDevis
     }
 }

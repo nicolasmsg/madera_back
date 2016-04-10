@@ -1,8 +1,7 @@
 namespace ConceptionDevisWS.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class ReadOnlyRefs : DbMigration
     {
         public override void Up()

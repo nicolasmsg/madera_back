@@ -8,18 +8,21 @@ namespace ConceptionDevisWS.Controllers
 {
     public class ModuleController : ApiController
     {
+        [Authorize]
         [Route("api/modules")]
         public async Task<IEnumerable<Module>> GetAllModules()
         {
             return await ModuleService.GetAllModules();
         }
 
+        [Authorize]
         [Route("api/modules/{id}")]
         public async Task<Module> GetModule(int id)
         {
             return await ModuleService.GetModule(id);
         }
 
+        [Authorize]
         [Route("api/modules/{id}")]
         [AcceptVerbs("DELETE")]
         public async Task<IHttpActionResult> DeleteModule(int id)
@@ -28,6 +31,7 @@ namespace ConceptionDevisWS.Controllers
             return Ok();
         }
 
+        [Authorize]
         [Route("api/modules/{id}")]
         [AcceptVerbs("PATCH")]
         public async Task<Module> PatchModule(int id, Module newModule)
@@ -35,6 +39,7 @@ namespace ConceptionDevisWS.Controllers
             return await ModuleService.UpdateModule(id, newModule);
         }
 
+        [Authorize]
         [Route("api/modules")]
         [AcceptVerbs("POST")]
         public async Task<Module> PostModule(Module newModule)

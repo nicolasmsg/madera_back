@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using ConceptionDevisWS.MessageHandlers;
+using System.Web.Http;
 
 namespace ConceptionDevisWS
 {
@@ -7,6 +8,7 @@ namespace ConceptionDevisWS
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configuration.MessageHandlers.Add(new JwtAuthMessageHandler());
         }
     }
 }

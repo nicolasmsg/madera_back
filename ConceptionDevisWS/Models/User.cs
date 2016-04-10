@@ -14,10 +14,10 @@ namespace ConceptionDevisWS.Models
         private ERights _rights;
 
         public int Id { get; set; }
-        [StringLength(50)]
+        [StringLength(50), Index(IsUnique =true)]
         [Required]
         public string Login { get; set; }
-        [StringLength(20), DataType(DataType.Password)]
+        [StringLength(64), DataType(DataType.Password)]
         [Required]
         public string Password { get; set; }
 

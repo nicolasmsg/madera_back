@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using ConceptionDevisWS.Models;
+﻿using ConceptionDevisWS.Models;
+using ConceptionDevisWS.Services.Utils;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Net.Http;
-using ConceptionDevisWS.Services.Utils;
 
 namespace ConceptionDevisWS.Services
 {
@@ -37,13 +36,20 @@ namespace ConceptionDevisWS.Services
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 Module module = await GetModule(id);
-                ctx.Entry(module).State = EntityState.Deleted;
-                await ctx.SaveChangesAsync();
+                if (module != null)
+                {
+                    ctx.Entry(module).State = EntityState.Deleted;
+                    await ctx.SaveChangesAsync();
+                }
             }
         }
 
         public async static Task<Module> CreateNew(Module newModule)
         {
+            if(newModule.Name == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 await ServiceHelper<Module>.InitNavigationProperty<Component>(newModule, ctx, getComposants, getContextComponents);
@@ -68,14 +74,17 @@ namespace ConceptionDevisWS.Services
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 Module module = await GetModule(id);
-                ctx.Entry(module).State = EntityState.Modified;
-                ctx.Entry(module).Collection(mod => mod.Components).EntityEntry.State = EntityState.Modified;
+                if (module != null)
+                {
+                    ctx.Entry(module).State = EntityState.Modified;
+                    ctx.Entry(module).Collection(mod => mod.Components).EntityEntry.State = EntityState.Modified;
 
-                await ServiceHelper<Module>.UpdateNavigationProperty<Component>(newModule, module, ctx, getComposants, getContextComponents);
+                    await ServiceHelper<Module>.UpdateNavigationProperty<Component>(newModule, module, ctx, getComposants, getContextComponents);
 
-                module.Nom = newModule.Nom;
+                    module.Name = newModule.Name;
 
-                int affectedRows = await ctx.SaveChangesAsync();
+                    int affectedRows = await ctx.SaveChangesAsync();
+                }
                 return module;
             }
         }
