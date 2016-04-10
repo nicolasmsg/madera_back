@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.Web.Http;
 
 namespace ConceptionDevisWS.Services.Utils
 {
-    public class ServiceHelper<T> where T : class
+    public class ServiceHelper<T> where T : class, IIdentifiable
     {
         public async static Task UpdateNavigationProperty<T2>(T src, T dest, DbContext context, 
             Func<T, ICollection<T2>> getCollection, 
@@ -51,7 +52,43 @@ namespace ConceptionDevisWS.Services.Utils
                 
             }
         }
+
+        public async static Task LoadSingleNavigationProperty<T2>(T src, DbContext context,
+            Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, Action<T, T2> setSingleProp)
+            where T2 :class, IIdentifiable
+        {
+            Func<T, T2> getSingleProp = singlePropExpr.Compile();
+            await EnsuresNotNew<T2>(src, getSingleProp, context, getCtxSingleProp);
+            T2 srcProperty = getSingleProp(src);
+            if (srcProperty != null)
+            {
+                T2 trackedProperty = await getCtxSingleProp(context).FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
+                context.Entry(trackedProperty).State = EntityState.Unchanged;
+                setSingleProp(src, trackedProperty);
+            }
+        }
+
+
+        public async static Task SetSingleNavigationProperty<T2>(T src, T dest, DbContext context,
+          Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, Action<T, T2> setSingleProp)
+            where T2 : class, IIdentifiable
+        {
+            Func<T, T2> getSingleProp = singlePropExpr.Compile();
+            await EnsuresNotNew<T2>(src, getSingleProp, context, getCtxSingleProp);
+            T2 srcProperty = getSingleProp(src);
+            if (srcProperty != null)
+            {
+                T2 trackedProperty = await getCtxSingleProp(context).FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
+                context.Entry(trackedProperty).State = EntityState.Unchanged;
+                setSingleProp(dest, trackedProperty);
+            } else
+            {
+               setSingleProp(dest, null);
+            }
             
+        }
+
+
         private async static Task EnsuresNoNewElement<T2>(T src, 
             Func<T, ICollection<T2>> getCollection, 
             DbContext context, Func<DbContext, DbSet<T2>> getCtxCollection
@@ -77,6 +114,27 @@ namespace ConceptionDevisWS.Services.Utils
             if (newElements.Count > 0)
             {
                 string errorMsg = string.Format("Following entities have not been found: {0}", string.Concat(newElements.ConvertAll( elt => elt.Id )));
+                throw new HttpResponseException(new HttpResponseMessage { StatusCode = HttpStatusCode.NotFound, Content = new StringContent(errorMsg) });
+            }
+        }
+
+
+        private async static Task EnsuresNotNew<T2>(T src,
+            Func<T, T2> getSingleProp, 
+            DbContext context, Func<DbContext, DbSet<T2>> getCtxSingleProp)
+            where T2:class, IIdentifiable
+        {
+            T2 srcProperty = getSingleProp(src);
+            if(srcProperty == null)
+            {
+                return;
+            }    
+            T2 trackedProperty = await getCtxSingleProp(context).FirstOrDefaultAsync(p => p.Id == srcProperty.Id);
+
+
+            if (trackedProperty == null)
+            {
+                string errorMsg = string.Format("Following entity has not been found: {0}", srcProperty.Id);
                 throw new HttpResponseException(new HttpResponseMessage { StatusCode = HttpStatusCode.NotFound, Content = new StringContent(errorMsg) });
             }
         }

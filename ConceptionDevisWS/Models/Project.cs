@@ -44,5 +44,21 @@ namespace ConceptionDevisWS.Models
                 _stateStr = _state.ToString();
             }
         }
+
+        public Project() { }
+        public Project(MiniProject miniProj, Client client)
+        {
+            Id = miniProj.Id;
+            Name = miniProj.Name;
+            State = miniProj.State;
+            Client = client;
+        }
+
+        public void UpdateNonComposedPropertiesFrom(Project newProject)
+        {
+            Id = newProject.Id;
+            Name = newProject.Name;
+            State = newProject.State;
+        }
     }
 }

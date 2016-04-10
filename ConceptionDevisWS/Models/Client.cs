@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace ConceptionDevisWS.Models
 {
@@ -27,8 +30,54 @@ namespace ConceptionDevisWS.Models
         [EmailAddress, StringLength(50)]
         public string Email { get; set; }
         public DateTime Birthdate { get; set; }
+        [IgnoreDataMember,XmlIgnore,JsonIgnore]
+        public List<Project> Projects { get; set; }
 
-        public List<Project> Projets { get; set; }
+        // used to avoid recursive type serialization, also it'll be clear only MiniProject.Id will matter 
+        // for update operations (that's an association display entity)
+        [NotMapped]
+        [JsonProperty("Projects")]
+        public List<MiniProject> MiniProjects
+        {
+            get
+            {
+                if (Projects == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return Projects.ConvertAll<MiniProject>(p => new MiniProject(p));
+                }
+            } 
+            set
+            {
+                if (value != null)
+                {
+                    if(Projects == null)
+                    {
+                        Projects = new List<Project>();
+                    }
+                    Projects.Clear();
+                    foreach(MiniProject miniProj in value)
+                    {
+                        Projects.Add(new Project(miniProj, this));
+                    }
+                }
+            }
+        }
+
+        public void UpdateNonComposedPropertiesFrom(Client newClient)
+        {
+            Address = newClient.Address;
+            City = newClient.City;
+            ZipCode = newClient.ZipCode;
+            Birthdate = newClient.Birthdate;
+            FirstName = newClient.FirstName;
+            LastName = newClient.LastName;
+            Phone = newClient.Phone;
+            Email = newClient.Email;
+        }
 
     }
 }

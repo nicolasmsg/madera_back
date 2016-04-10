@@ -36,11 +36,8 @@ namespace ConceptionDevisWS.Services
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 Module module = await GetModule(id);
-                if (module != null)
-                {
-                    ctx.Entry(module).State = EntityState.Deleted;
-                    await ctx.SaveChangesAsync();
-                }
+                ctx.Entry(module).State = EntityState.Deleted;
+                await ctx.SaveChangesAsync();
             }
         }
 
@@ -52,7 +49,7 @@ namespace ConceptionDevisWS.Services
             }
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                await ServiceHelper<Module>.InitNavigationProperty<Component>(newModule, ctx, getComposants, getContextComponents);
+                await ServiceHelper<Module>.InitNavigationProperty<Component>(newModule, ctx, _getComposants, _getContextComponents);
                 ctx.Modules.Add(newModule);
                 
                 await ctx.SaveChangesAsync();
@@ -73,28 +70,26 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                Module module = await GetModule(id);
-                if (module != null)
-                {
-                    ctx.Entry(module).State = EntityState.Modified;
-                    ctx.Entry(module).Collection(mod => mod.Components).EntityEntry.State = EntityState.Modified;
+                Module seekedModule = await GetModule(id);
+                ctx.Entry(seekedModule).State = EntityState.Modified;
+                ctx.Entry(seekedModule).Collection(mod => mod.Components).EntityEntry.State = EntityState.Modified;
 
-                    await ServiceHelper<Module>.UpdateNavigationProperty<Component>(newModule, module, ctx, getComposants, getContextComponents);
+                await ServiceHelper<Module>.UpdateNavigationProperty<Component>(newModule, seekedModule, ctx, _getComposants, _getContextComponents);
 
-                    module.Name = newModule.Name;
+                seekedModule.UpdateNonComposedPropertiesFrom(newModule);
 
-                    int affectedRows = await ctx.SaveChangesAsync();
-                }
-                return module;
+                int affectedRows = await ctx.SaveChangesAsync();
+                
+                return seekedModule;
             }
         }
 
-        private static List<Component> getComposants(Module module)
+        private static List<Component> _getComposants(Module module)
         {
             return module.Components;
         }
 
-        private static DbSet<Component> getContextComponents(DbContext context)
+        private static DbSet<Component> _getContextComponents(DbContext context)
         {
             return ((ModelsDBContext)context).Components;
         }
