@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using ConceptionDevisWS.Models.Auth;
+using System.Data.Entity;
 
 namespace ConceptionDevisWS.Models
 {
@@ -13,6 +14,8 @@ namespace ConceptionDevisWS.Models
         public DbSet<Project> Projects { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<RevokedToken> RevokedTokens { get; set; }
 
         public ModelsDBContext() 
             :base("db")

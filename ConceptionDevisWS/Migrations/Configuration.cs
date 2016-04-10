@@ -1,6 +1,7 @@
 namespace ConceptionDevisWS.Migrations
 {
     using Models;
+    using Services.Utils;
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
 
@@ -21,6 +22,9 @@ namespace ConceptionDevisWS.Migrations
             Module murS1 = new Module { Id = 2, Name = "Mur Sud 1", Components = new List<Component> { sectionFinale, sectionPaloise } };
 
             context.Modules.AddRange(new List<Module> { murN1, murS1 });
+            context.Users.AddOrUpdate(new User[] {
+                new User { Login="tutu", Password=HashManager.GetHash("ah$34!"), Rights=ERights.ConceptionDevis }
+            });
         }
 
     }

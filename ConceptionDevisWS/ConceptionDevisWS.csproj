@@ -143,8 +143,11 @@
     <Compile Include="Migrations\201604101333066_RevokedTokens.Designer.cs">
       <DependentUpon>201604101333066_RevokedTokens.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604101449121_RevokedTokens1.cs" />
+    <Compile Include="Migrations\201604101449121_RevokedTokens1.Designer.cs">
+      <DependentUpon>201604101449121_RevokedTokens1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Auth\AuthDBContext.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Component.cs" />
@@ -202,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604101333066_RevokedTokens.resx">
       <DependentUpon>201604101333066_RevokedTokens.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604101449121_RevokedTokens1.resx">
+      <DependentUpon>201604101449121_RevokedTokens1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -70,33 +70,33 @@ namespace ConceptionDevisWS.Services
 
         public async static Task Logout(IPrincipal principal)
         {
-            using (AuthDBContext authCtx = new AuthDBContext())
+            using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 RevokedToken revokedToken = new RevokedToken { Name = principal.Identity.Name };
-                authCtx.RevokedTokens.Add(revokedToken);
-                await authCtx.SaveChangesAsync();
+                ctx.RevokedTokens.Add(revokedToken);
+                await ctx.SaveChangesAsync();
             }
         }
 
 
         private async static Task<RevokedToken> _findToken(string login)
         {
-            using (AuthDBContext authCtx = new AuthDBContext())
+            using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                RevokedToken revokedToken = await authCtx.RevokedTokens.FirstOrDefaultAsync(t => t.Name == login);
+                RevokedToken revokedToken = await ctx.RevokedTokens.FirstOrDefaultAsync(t => t.Name == login);
                 return revokedToken;
             }
         }
 
         private async static Task _removeLogout(string login)
         {
-            using (AuthDBContext authCtx = new AuthDBContext())
+            using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 RevokedToken seekedToken = await _findToken(login);
                 if (seekedToken != null)
                 {
-                    authCtx.Entry(seekedToken).State = EntityState.Deleted;
-                    await authCtx.SaveChangesAsync();
+                    ctx.Entry(seekedToken).State = EntityState.Deleted;
+                    await ctx.SaveChangesAsync();
                 }
             }
         }
