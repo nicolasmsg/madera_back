@@ -21,6 +21,7 @@ namespace ConceptionDevisWS.Models
         }
         [StringLength(30), Column("Nom")]
         public string Name { get; set; }
+        [Required]
         public Client Client { get; set; }
         [Column("DateCreation")]
         public DateTime CreationDate { get; set; }

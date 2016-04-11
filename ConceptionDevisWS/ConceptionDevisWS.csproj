@@ -153,6 +153,10 @@
     <Compile Include="Migrations\201604102030164_ProjectCreationDate.Designer.cs">
       <DependentUpon>201604102030164_ProjectCreationDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604110417330_RequiresProjectToHaveAClient.cs" />
+    <Compile Include="Migrations\201604110417330_RequiresProjectToHaveAClient.Designer.cs">
+      <DependentUpon>201604110417330_RequiresProjectToHaveAClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -220,6 +224,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604102030164_ProjectCreationDate.resx">
       <DependentUpon>201604102030164_ProjectCreationDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604110417330_RequiresProjectToHaveAClient.resx">
+      <DependentUpon>201604110417330_RequiresProjectToHaveAClient.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
