@@ -5,53 +5,49 @@ using System.Data.Entity;
 using System.Web.Http;
 using System.Net;
 using ConceptionDevisWS.Services.Utils;
-using System;
+using System.Linq;
 
 namespace ConceptionDevisWS.Services
 {
     public class ProjectService
     {
-        public async static Task<IEnumerable<Project>> GetAllProjects()
+        public async static Task<IEnumerable<Project>> GetClientProjects(int clientId)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                return await ctx.Projects.Include( p => p.Client ).ToListAsync<Project>();
+                Client seekedClient = await _searchClient(clientId);
+                return seekedClient.Projects;
+
             }
         }
 
-        public async static Task<Project> GetProject(int id)
+        public async static Task<Project> GetClientProject(int clientId, int id)
         {
-            if (id == 0)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                Project project = await ctx.Projects.Include(p => p.Client).FirstOrDefaultAsync(c => c.Id == id);
-                if (project == null)
-                {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
-                return project;
+                return await _searchClientProject(clientId, id);
             }
         }
 
-        public async static Task RemoveProject(int id)
+        public async static Task RemoveProject(int clientId, int id)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                Project seekedProject = await GetProject(id);
+                Project seekedProject = await _searchClientProject(clientId, id);
                 ctx.Entry(seekedProject).State = EntityState.Deleted;
                 await ctx.SaveChangesAsync();
             }
         }
 
-        public async static Task<Project> CreateNew(Project newProject)
+        public async static Task<Project> CreateNew(int clientId, Project newProject)
         {
             if (newProject.Name == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
+            await _searchClient(clientId);
+            newProject.Client.Id = clientId;
 
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
@@ -62,12 +58,13 @@ namespace ConceptionDevisWS.Services
             }
         }
 
-        public async static Task<Project> UpdateProject(int id, Project newProject)
+        public async static Task<Project> UpdateProject(int clientId, int id, Project newProject)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                Project seekedProject = await GetProject(id);
-                
+                newProject.Client.Id = clientId;
+
+                Project seekedProject = await _searchClientProject(clientId, id);
                 ctx.Entry(seekedProject).State = EntityState.Modified;
                 await ServiceHelper<Project>.SetSingleNavigationProperty<Client>(newProject, seekedProject, ctx, p => p.Client, _getCtxClients, _setClient);
 
@@ -76,6 +73,26 @@ namespace ConceptionDevisWS.Services
                 return seekedProject;
 
             }
+        }
+
+        private async static Task<Client> _searchClient(int clientId)
+        {
+            return await ClientService.GetClient(clientId);
+        }
+
+        private async static Task<Project> _searchClientProject(int clientId, int id)
+        {
+            if (id == 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            Client seekedClient = await _searchClient(clientId);
+            Project seekedProject = seekedClient.Projects.FirstOrDefault(p => p.Id == id);
+            if(seekedClient == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            return seekedProject;
         }
 
         private static void _setClient(Project project, Client client)

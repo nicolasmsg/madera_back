@@ -9,42 +9,42 @@ namespace ConceptionDevisWS.Controllers
     public class ProjectController : ApiController
     {
         [Authorize]
-        [Route("api/projects")]
-        public async Task<IEnumerable<Project>> GetAllProjects()
+        [Route("api/clients/{clientId}/projects")]
+        public async Task<IEnumerable<Project>> GetClientProjects(int clientId)
         {
-            return await ProjectService.GetAllProjects();
+            return await ProjectService.GetClientProjects(clientId);
         }
 
         [Authorize]
-        [Route("api/projects/{id}")]
-        public async Task<Project> GetProject(int id)
+        [Route("api/clients/{clientId}/projects/{id}")]
+        public async Task<Project> GeClientProject(int clientId, int id)
         {
-            return await ProjectService.GetProject(id);
+            return await ProjectService.GetClientProject(clientId, id);
         }
 
         [Authorize]
-        [Route("api/projects/{id}")]
+        [Route("api/clients/{clientId}/projects/{id}")]
         [AcceptVerbs("DELETE")]
-        public async Task<IHttpActionResult> DeleteProject(int id)
+        public async Task<IHttpActionResult> DeleteProject(int clientId, int id)
         {
-            await ProjectService.RemoveProject(id);
+            await ProjectService.RemoveProject(clientId, id);
             return Ok();
         }
 
         [Authorize]
-        [Route("api/projects/{id}")]
+        [Route("api/clients/{clientId}/projects/{id}")]
         [AcceptVerbs("PATCH")]
-        public async Task<Project> PatchProject(int id, Project newProject)
+        public async Task<Project> PatchProject(int clientId, int id, Project newProject)
         {
-            return await ProjectService.UpdateProject(id, newProject);
+            return await ProjectService.UpdateProject(clientId, id, newProject);
         }
 
         [Authorize]
-        [Route("api/projects")]
+        [Route("api/clients/{clientId}/projects")]
         [AcceptVerbs("POST")]
-        public async Task<Project> PostProject(Project newProject)
+        public async Task<Project> PostProject(int clientId, Project newProject)
         {
-            return await ProjectService.CreateNew(newProject);
+            return await ProjectService.CreateNew(clientId, newProject);
         }
     }
 }

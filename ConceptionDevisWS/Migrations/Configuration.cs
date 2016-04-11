@@ -2,6 +2,7 @@ namespace ConceptionDevisWS.Migrations
 {
     using Models;
     using Services.Utils;
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
 
@@ -22,9 +23,37 @@ namespace ConceptionDevisWS.Migrations
             Module murS1 = new Module { Id = 2, Name = "Mur Sud 1", Components = new List<Component> { sectionFinale, sectionPaloise } };
 
             context.Modules.AddRange(new List<Module> { murN1, murS1 });
+
+
             context.Users.AddOrUpdate(new User[] {
-                new User { Login="tutu", Password=HashManager.GetHash("ah$34!"), Rights=ERights.ConceptionDevis }
+                new User { Id=1, Login="tutu", Password=HashManager.GetHash("ah$34!"), Rights=ERights.ConceptionDevis }
             });
+
+            Client client = new Client {
+                Id = 1,
+                FirstName = "Test",
+                LastName = "Tartampion",
+                Address = "10 rue Lagrange",
+                City = "Pau",
+                ZipCode = 64000,
+                Email = "test.tartampion@laposte.net",
+                Birthdate = new DateTime(1984, 11, 16, 0, 0, 0, DateTimeKind.Utc)
+            };
+
+            Project firstProj = new Project
+            {
+                Id = 1,
+                Name = "SuperProjet1",
+                CreationDate = DateTime.UtcNow,
+                State = EProjectState.Signed,
+                Client = client
+            };
+
+            context.Clients.AddOrUpdate(new Client[] { client });
+            context.Projects.AddOrUpdate(new Project[] {
+                firstProj
+            });
+
         }
 
     }

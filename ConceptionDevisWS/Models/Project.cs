@@ -22,6 +22,8 @@ namespace ConceptionDevisWS.Models
         [StringLength(30), Column("Nom")]
         public string Name { get; set; }
         public Client Client { get; set; }
+        [Column("DateCreation")]
+        public DateTime CreationDate { get; set; }
 
         [IgnoreDataMember,XmlIgnore,JsonIgnore]
         [Column("Etat")]
@@ -52,6 +54,7 @@ namespace ConceptionDevisWS.Models
             Name = miniProj.Name;
             State = miniProj.State;
             Client = client;
+            CreationDate = miniProj.CreationDate;
         }
 
         public void UpdateNonComposedPropertiesFrom(Project newProject)
@@ -59,6 +62,7 @@ namespace ConceptionDevisWS.Models
             Id = newProject.Id;
             Name = newProject.Name;
             State = newProject.State;
+            CreationDate = newProject.CreationDate;
         }
     }
 }

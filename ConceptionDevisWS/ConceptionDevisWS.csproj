@@ -149,6 +149,10 @@
     <Compile Include="Migrations\201604101449121_RevokedTokens1.Designer.cs">
       <DependentUpon>201604101449121_RevokedTokens1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604102030164_ProjectCreationDate.cs" />
+    <Compile Include="Migrations\201604102030164_ProjectCreationDate.Designer.cs">
+      <DependentUpon>201604102030164_ProjectCreationDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -213,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604101449121_RevokedTokens1.resx">
       <DependentUpon>201604101449121_RevokedTokens1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604102030164_ProjectCreationDate.resx">
+      <DependentUpon>201604102030164_ProjectCreationDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

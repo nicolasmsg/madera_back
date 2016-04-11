@@ -1,4 +1,6 @@
-﻿namespace ConceptionDevisWS.Models
+﻿using System;
+
+namespace ConceptionDevisWS.Models
 {
     public class MiniProject
     {
@@ -6,6 +8,7 @@
         public string Reference { get; set; }
         public string Name { get; set; }
         public EProjectState State { get; set; }
+        public DateTime CreationDate { get; set; }
 
         public MiniProject() { }
 
@@ -15,6 +18,7 @@
             Reference = project.Reference;
             Name = project.Name;
             State = project.State;
+            CreationDate = project.CreationDate;
         }
     }
 }
