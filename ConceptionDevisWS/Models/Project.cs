@@ -12,6 +12,8 @@ namespace ConceptionDevisWS.Models
     {
         private string _stateStr;
         private EProjectState _state;
+        private Client _client;
+        private MiniClient _miniClient;
 
         public int Id { get; set; }
         [StringLength(50),Index(IsUnique = true)]
@@ -21,8 +23,20 @@ namespace ConceptionDevisWS.Models
         }
         [StringLength(30), Column("Nom")]
         public string Name { get; set; }
+        [IgnoreDataMember,XmlIgnore,JsonIgnore]
         [Required]
-        public Client Client { get; set; }
+        public Client Client
+        {
+            get
+            {
+                return _client;
+            }
+            set
+            {
+                _client = value;
+                _miniClient = new MiniClient(_client);
+            }
+        }
         [Column("DateCreation")]
         public DateTime CreationDate { get; set; }
 
@@ -45,6 +59,18 @@ namespace ConceptionDevisWS.Models
             {
                 _state = value;
                 _stateStr = _state.ToString();
+            }
+        }
+
+        [NotMapped]
+        [JsonProperty("Client")]
+        public MiniClient MiniClient
+        {
+            get { return _miniClient; }
+            set
+            {
+                _miniClient = value;
+                _client = new Client(_miniClient);
             }
         }
 

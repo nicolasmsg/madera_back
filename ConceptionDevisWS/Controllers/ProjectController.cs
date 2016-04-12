@@ -17,6 +17,7 @@ namespace ConceptionDevisWS.Controllers
 
         [Authorize]
         [Route("api/clients/{clientId}/projects/{id}")]
+        [AcceptVerbs("GET")]
         public async Task<Project> GeClientProject(int clientId, int id)
         {
             return await ProjectService.GetClientProject(clientId, id);

@@ -17,19 +17,26 @@ namespace ConceptionDevisWS.Models
             get { return "CLI-" + Id; }
         }
         [StringLength(30)]
+        [Column("Prenom")]
         public string FirstName { get; set; }
         [StringLength(30)]
+        [Column("Nom")]
         public string LastName { get; set; }
         [StringLength(100)]
+        [Column("Adresse")]
         public string Address { get; set; }
         [StringLength(30)]
+        [Column("Ville")]
         public string City { get; set; }
+        [Column("CodePostal")]
         public int ZipCode { get; set; }
         [StringLength(10)]
+        [Column("Telephone")]
         public string Phone { get; set; }
         [EmailAddress, StringLength(50)]
         public string Email { get; set; }
-        public DateTime Birthdate { get; set; }
+        [Column("DateDeNaissance")]
+        public DateTime Birdthdate { get; set; }
         [IgnoreDataMember,XmlIgnore,JsonIgnore]
         public List<Project> Projects { get; set; }
 
@@ -64,6 +71,29 @@ namespace ConceptionDevisWS.Models
                         Projects.Add(new Project(miniProj, this));
                     }
                 }
+                else
+                {
+                    Projects = null;
+                }
+            }
+        }
+
+        public Client() { }
+
+        public Client(MiniClient miniClient)
+        {
+            if (miniClient != null)
+            {
+
+                Id = miniClient.Id;
+                FirstName = miniClient.FirstName;
+                LastName = miniClient.LastName;
+                Address = miniClient.Address;
+                City = miniClient.City;
+                ZipCode = miniClient.ZipCode;
+                Phone = miniClient.Phone;
+                Email = miniClient.Email;
+                Birdthdate = miniClient.Birdthdate;
             }
         }
 
@@ -72,7 +102,7 @@ namespace ConceptionDevisWS.Models
             Address = newClient.Address;
             City = newClient.City;
             ZipCode = newClient.ZipCode;
-            Birthdate = newClient.Birthdate;
+            Birdthdate = newClient.Birdthdate;
             FirstName = newClient.FirstName;
             LastName = newClient.LastName;
             Phone = newClient.Phone;

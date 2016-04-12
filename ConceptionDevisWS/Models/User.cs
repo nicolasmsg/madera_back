@@ -16,9 +16,11 @@ namespace ConceptionDevisWS.Models
         public int Id { get; set; }
         [StringLength(50), Index(IsUnique =true)]
         [Required]
+        [Column("Nom")]
         public string Login { get; set; }
         [StringLength(64), DataType(DataType.Password)]
         [Required]
+        [Column("MotDePasse")]
         public string Password { get; set; }
 
         [Column("Droits")]

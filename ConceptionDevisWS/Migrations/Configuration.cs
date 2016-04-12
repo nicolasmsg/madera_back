@@ -37,7 +37,7 @@ namespace ConceptionDevisWS.Migrations
                 City = "Pau",
                 ZipCode = 64000,
                 Email = "test.tartampion@laposte.net",
-                Birthdate = new DateTime(1984, 11, 16, 0, 0, 0, DateTimeKind.Utc)
+                Birdthdate = new DateTime(1984, 11, 16, 0, 0, 0, DateTimeKind.Utc)
             };
 
             Project firstProj = new Project

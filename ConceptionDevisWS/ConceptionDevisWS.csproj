@@ -157,6 +157,14 @@
     <Compile Include="Migrations\201604110417330_RequiresProjectToHaveAClient.Designer.cs">
       <DependentUpon>201604110417330_RequiresProjectToHaveAClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604121909224_AddMiniClient.cs" />
+    <Compile Include="Migrations\201604121909224_AddMiniClient.Designer.cs">
+      <DependentUpon>201604121909224_AddMiniClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604121914579_FixedFrenchDatabaseColumn.cs" />
+    <Compile Include="Migrations\201604121914579_FixedFrenchDatabaseColumn.Designer.cs">
+      <DependentUpon>201604121914579_FixedFrenchDatabaseColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -165,6 +173,7 @@
     <Compile Include="Models\ERights.cs" />
     <Compile Include="Models\EProjectState.cs" />
     <Compile Include="Models\IIdentifiable.cs" />
+    <Compile Include="Models\MiniClient.cs" />
     <Compile Include="Models\MiniProject.cs" />
     <Compile Include="Models\ModelsDBContext.cs" />
     <Compile Include="Models\Module.cs" />
@@ -227,6 +236,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604110417330_RequiresProjectToHaveAClient.resx">
       <DependentUpon>201604110417330_RequiresProjectToHaveAClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604121909224_AddMiniClient.resx">
+      <DependentUpon>201604121909224_AddMiniClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604121914579_FixedFrenchDatabaseColumn.resx">
+      <DependentUpon>201604121914579_FixedFrenchDatabaseColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

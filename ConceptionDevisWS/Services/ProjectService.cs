@@ -62,6 +62,10 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
+                if (newProject.Client == null)
+                {
+                    newProject.Client = new Client();
+                }
                 newProject.Client.Id = clientId;
 
                 Project seekedProject = await _searchClientProject(clientId, id);
@@ -88,7 +92,7 @@ namespace ConceptionDevisWS.Services
             }
             Client seekedClient = await _searchClient(clientId);
             Project seekedProject = seekedClient.Projects.FirstOrDefault(p => p.Id == id);
-            if(seekedClient == null)
+            if(seekedClient == null || seekedProject == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
