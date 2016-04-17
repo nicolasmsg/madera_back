@@ -59,7 +59,8 @@ namespace ConceptionDevisWS.Services
             {
                 a2un = string.Format("{0}.{1}.{2}", string.Format("{0:X12}", r1.Next(0x5F4A2C3)), string.Format("{0:X18}", r1.Next(0x5FDA6C1)), string.Format("{0:X22}", r1.Next(0x5F1C2C3))),
                 az4s = JsonWebTokenManager.CreateToken(user.Login, "user", baseAddress),
-                e7gu = string.Format("{0}.{1}.{2}", string.Format("{0:X12}", r2.Next(0x5F4A2C3)), string.Format("{0:X18}", r2.Next(0x5FDA6C1)), string.Format("{0:X22}", r2.Next(0x5F1C2C3)))
+                e7gu = string.Format("{0}.{1}.{2}", string.Format("{0:X12}", r2.Next(0x5F4A2C3)), string.Format("{0:X18}", r2.Next(0x5FDA6C1)), string.Format("{0:X22}", r2.Next(0x5F1C2C3))),
+                user = seekedUser
             };
         }
 

@@ -9,6 +9,7 @@ namespace ConceptionDevisWS.Models
         public string Name { get; set; }
         public EProjectState State { get; set; }
         public DateTime CreationDate { get; set; }
+        public string TechnicalSheetPath { get; set; }
 
         public MiniProject() { }
 
@@ -19,6 +20,7 @@ namespace ConceptionDevisWS.Models
             Name = project.Name;
             State = project.State;
             CreationDate = project.CreationDate;
+            TechnicalSheetPath = project.TechnicalSheetPath;
         }
     }
 }

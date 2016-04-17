@@ -40,6 +40,9 @@ namespace ConceptionDevisWS.Models
         [Column("DateCreation")]
         public DateTime CreationDate { get; set; }
 
+        [Column("CheminDossierTechnique")]
+        public string TechnicalSheetPath { get; set; }
+
         [IgnoreDataMember,XmlIgnore,JsonIgnore]
         [Column("Etat")]
         public string StateStr

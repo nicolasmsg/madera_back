@@ -165,6 +165,10 @@
     <Compile Include="Migrations\201604121914579_FixedFrenchDatabaseColumn.Designer.cs">
       <DependentUpon>201604121914579_FixedFrenchDatabaseColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604171404284_AddedTechnicalSheetPath.cs" />
+    <Compile Include="Migrations\201604171404284_AddedTechnicalSheetPath.Designer.cs">
+      <DependentUpon>201604171404284_AddedTechnicalSheetPath.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -242,6 +246,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604121914579_FixedFrenchDatabaseColumn.resx">
       <DependentUpon>201604121914579_FixedFrenchDatabaseColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604171404284_AddedTechnicalSheetPath.resx">
+      <DependentUpon>201604171404284_AddedTechnicalSheetPath.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -46,7 +46,8 @@ namespace ConceptionDevisWS.Migrations
                 Name = "SuperProjet1",
                 CreationDate = DateTime.UtcNow,
                 State = EProjectState.Signed,
-                Client = client
+                Client = client,
+                TechnicalSheetPath = @"/techSheets/techSheet_1.pdf"
             };
 
             context.Clients.AddOrUpdate(new Client[] { client });
