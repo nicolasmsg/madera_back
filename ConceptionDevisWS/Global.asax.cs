@@ -1,5 +1,4 @@
-﻿using ConceptionDevisWS.ActionFilters;
-using ConceptionDevisWS.MessageHandlers;
+﻿using ConceptionDevisWS.MessageHandlers;
 using System.Web.Http;
 
 namespace ConceptionDevisWS
@@ -9,8 +8,9 @@ namespace ConceptionDevisWS
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configuration.MessageHandlers.Add(new CorsMessageHandler());
             GlobalConfiguration.Configuration.MessageHandlers.Add(new JwtAuthMessageHandler());
-            GlobalConfiguration.Configuration.Filters.Add(new CorsActionFilter());
+            
         }
     }
 }

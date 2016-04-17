@@ -100,7 +100,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionFilters\CorsActionFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\ModuleController.cs" />
@@ -109,6 +108,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="MessageHandlers\CorsMessageHandler.cs" />
     <Compile Include="MessageHandlers\JwtAuthMessageHandler.cs" />
     <Compile Include="Migrations\201604021911208_Initial.cs" />
     <Compile Include="Migrations\201604021911208_Initial.Designer.cs">
