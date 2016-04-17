@@ -55,6 +55,7 @@ namespace ConceptionDevisWS.Services
 
             Random r1 = new Random(159736545);
             Random r2 = new Random(1892344171);
+            seekedUser.Password = null;
             return new
             {
                 a2un = string.Format("{0}.{1}.{2}", string.Format("{0:X12}", r1.Next(0x5F4A2C3)), string.Format("{0:X18}", r1.Next(0x5FDA6C1)), string.Format("{0:X22}", r1.Next(0x5F1C2C3))),
