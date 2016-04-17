@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ConceptionDevisWS.Models.Auth
 {
+    /// <summary>
+    /// Simple model class to handle logout
+    /// </summary>
     public class RevokedToken
     {
         public int Id { get; set; }
