@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Security.Claims;
 using System.Linq;
 using ConceptionDevisWS.Models.Auth;
+using System.Collections.Generic;
 
 namespace ConceptionDevisWS.Services
 {
@@ -22,10 +23,36 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        public async static Task<User> GetUser(int id)
+
+        {
+            using (ModelsDBContext ctx = new ModelsDBContext())
+            {
+                User seekedUser = await ctx.Users.FirstOrDefaultAsync(u => u.Id == id);
+                if(seekedUser == null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
+                return seekedUser;
+            }
+        }
+
+        public async static Task<IEnumerable<User>> GetAllUsers()
+        {
+            using (ModelsDBContext ctx = new ModelsDBContext())
+            {
+                return await ctx.Users.Include(u => u.Clients).ToListAsync<User>();
+            }
+        }
+
         public async static Task<User> Register(User user)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
+                if(user == null || user.Login == null || user.Password == null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+                }
                 ctx.Users.Add(user);
                 user.Rights = ERights.ConceptionDevis;
                 user.Password = HashManager.GetHash(user.Password);
@@ -80,6 +107,30 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        public async static Task<User> UpdateUser(int id, User newUser)
+        {
+            using (ModelsDBContext ctx = new ModelsDBContext())
+            {
+                User seekedUser = await GetUser(id);
+                ctx.Entry(seekedUser).State = EntityState.Modified;
+                ctx.Entry(seekedUser).Collection(u => u.Clients).EntityEntry.State = EntityState.Modified;
+
+                await ServiceHelper<User>.UpdateNavigationProperty<Client>(newUser, seekedUser, ctx, _getClients, _getCtxClients);
+                seekedUser.UpdateNonComposedPropertiesFrom(newUser);
+                await ctx.SaveChangesAsync();
+                return seekedUser;
+            }
+        }
+
+        public async static Task RemoveUser(int id)
+        {
+            using (ModelsDBContext ctx = new ModelsDBContext())
+            {
+                User seekedUser = await GetUser(id);
+                ctx.Entry(seekedUser).State = EntityState.Deleted;
+                await ctx.SaveChangesAsync();
+            }
+        }
 
         private async static Task<RevokedToken> _findToken(string login)
         {
@@ -101,6 +152,16 @@ namespace ConceptionDevisWS.Services
                     await ctx.SaveChangesAsync();
                 }
             }
+        }
+
+        private static List<Client> _getClients(User user)
+        {
+            return user.Clients;
+        }
+
+        private static DbSet<Client> _getCtxClients(DbContext context)
+        {
+            return ((ModelsDBContext)context).Clients;
         }
     }
 }

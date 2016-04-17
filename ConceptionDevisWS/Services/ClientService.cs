@@ -48,7 +48,7 @@ namespace ConceptionDevisWS.Services
 
         public async static Task<Client> CreateNew(Client newClient)
         {
-            if(newClient.FirstName == null || newClient.LastName == null)
+            if(newClient == null || newClient.FirstName == null || newClient.LastName == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }

@@ -42,7 +42,7 @@ namespace ConceptionDevisWS.Services
 
         public async static Task<Project> CreateNew(int clientId, Project newProject)
         {
-            if (newProject.Name == null)
+            if (newProject == null || newProject.Name == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }

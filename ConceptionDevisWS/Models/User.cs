@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
@@ -23,6 +24,8 @@ namespace ConceptionDevisWS.Models
         [Column("MotDePasse")]
         public string Password { get; set; }
 
+        public List<Client> Clients { get; set; }
+
         [Column("Droits")]
         [IgnoreDataMember, XmlIgnore, JsonIgnore]
         public string RightsStr
@@ -43,6 +46,21 @@ namespace ConceptionDevisWS.Models
                 _rights = value;
                 _rightsStr = _rights.ToString();
             }
-        } 
+        }
+        
+        public void UpdateNonComposedPropertiesFrom(User newUser)
+        {
+            Login = newUser.Login;
+            Password = newUser.Password;
+            if (newUser.Clients != null)
+            {
+                if (Clients == null)
+                {
+                    Clients = new List<Client>();
+                }
+                Clients.Clear();
+                Clients.AddRange(newUser.Clients);
+            }
+        }
     }
 }

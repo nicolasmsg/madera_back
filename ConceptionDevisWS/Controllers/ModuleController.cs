@@ -33,8 +33,8 @@ namespace ConceptionDevisWS.Controllers
 
         [Authorize]
         [Route("api/modules/{id}")]
-        [AcceptVerbs("PATCH")]
-        public async Task<Module> PatchModule(int id, Module newModule)
+        [AcceptVerbs("PUT")]
+        public async Task<Module> PutModule(int id, Module newModule)
         {
             return await ModuleService.UpdateModule(id, newModule);
         }

@@ -33,8 +33,8 @@ namespace ConceptionDevisWS.Controllers
 
         [Authorize]
         [Route("api/clients/{id}")]
-        [AcceptVerbs("PATCH")]
-        public async Task<Client> PatchClient(int id, Client newClient)
+        [AcceptVerbs("PUT")]
+        public async Task<Client> PutClient(int id, Client newClient)
         {
             return await ClientService.UpdateClient(id, newClient);
         }

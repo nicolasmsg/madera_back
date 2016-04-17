@@ -25,8 +25,7 @@ namespace ConceptionDevisWS.MessageHandlers
                 if (request.Method == HttpMethod.Options)
                 {
                     response = request.CreateResponse(HttpStatusCode.OK);
-                    List<string> headers = new List<string>(request.Headers.GetValues("Access-Control-Request-Headers"));
-                    AddCorsHeaders(response, headers);
+                    AddCorsHeaders(response, request.Headers.GetValues("Access-Control-Request-Headers"));
                 }
                 else
                 {

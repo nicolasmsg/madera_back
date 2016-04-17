@@ -1,5 +1,6 @@
 ﻿using ConceptionDevisWS.Models;
 using ConceptionDevisWS.Services;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -19,6 +20,7 @@ namespace ConceptionDevisWS.Controllers
             base.Dispose(disposing);
         }
         
+        [Authorize]
         [Route("api/login")]
         [AcceptVerbs("POST")]
         public async Task<IHttpActionResult> Login(User user)
@@ -27,11 +29,44 @@ namespace ConceptionDevisWS.Controllers
             return Ok<object>(result);
         }
         
+        [Authorize]
+        [Route("api/users/{id}")]
+        public async Task<User> GetUser(int id)
+        {
+            return await UserService.GetUser(id);
+        }
+
+        [Authorize]
+        [Route("api/users")]
+        [AcceptVerbs("GET")]
+        public async Task<IEnumerable<User>> GetAllUsers()
+        {
+            return await UserService.GetAllUsers();
+        }
+
+        [Authorize]
+        [Route("api/users/{id}")]
+        [AcceptVerbs("PUT")]
+        public async Task<User> PutUser(int id, User user)
+        {
+            return await UserService.UpdateUser(id, user);
+        }
+
+        [Authorize]
         [Route("api/registration")]
         [AcceptVerbs("POST")]
         public async Task<User> Register(User user)
         {
             return await UserService.Register(user);
+        }
+
+        [Authorize]
+        [Route("api/users/{id}")]
+        [AcceptVerbs("DELETE")]
+        public async Task<IHttpActionResult> DeleteUser(int id)
+        {
+            await UserService.RemoveUser(id);
+            return Ok();
         }
 
         [Authorize]

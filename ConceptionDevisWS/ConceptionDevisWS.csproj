@@ -170,6 +170,14 @@
     <Compile Include="Migrations\201604171404284_AddedTechnicalSheetPath.Designer.cs">
       <DependentUpon>201604171404284_AddedTechnicalSheetPath.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604171900189_AddedUserClients.cs" />
+    <Compile Include="Migrations\201604171900189_AddedUserClients.Designer.cs">
+      <DependentUpon>201604171900189_AddedUserClients.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604171908390_RenamedUserColumn.cs" />
+    <Compile Include="Migrations\201604171908390_RenamedUserColumn.Designer.cs">
+      <DependentUpon>201604171908390_RenamedUserColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -250,6 +258,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604171404284_AddedTechnicalSheetPath.resx">
       <DependentUpon>201604171404284_AddedTechnicalSheetPath.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604171900189_AddedUserClients.resx">
+      <DependentUpon>201604171900189_AddedUserClients.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604171908390_RenamedUserColumn.resx">
+      <DependentUpon>201604171908390_RenamedUserColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

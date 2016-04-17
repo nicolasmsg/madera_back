@@ -34,8 +34,8 @@ namespace ConceptionDevisWS.Controllers
 
         [Authorize]
         [Route("api/clients/{clientId}/projects/{id}")]
-        [AcceptVerbs("PATCH")]
-        public async Task<Project> PatchProject(int clientId, int id, Project newProject)
+        [AcceptVerbs("PUT")]
+        public async Task<Project> PutProject(int clientId, int id, Project newProject)
         {
             return await ProjectService.UpdateProject(clientId, id, newProject);
         }

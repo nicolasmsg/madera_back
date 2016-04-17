@@ -40,6 +40,9 @@ namespace ConceptionDevisWS.Models
         [IgnoreDataMember,XmlIgnore,JsonIgnore]
         public List<Project> Projects { get; set; }
 
+        [IgnoreDataMember, XmlIgnore, JsonIgnore]
+        public User User { get; set; }
+
         // used to avoid recursive type serialization, also it'll be clear only MiniProject.Id will matter 
         // for update operations (that's an association display entity)
         [NotMapped]

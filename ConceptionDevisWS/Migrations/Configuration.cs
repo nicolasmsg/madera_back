@@ -24,10 +24,17 @@ namespace ConceptionDevisWS.Migrations
 
             context.Modules.AddRange(new List<Module> { murN1, murS1 });
 
+            User tutuUser = new User
+            {
+                Id = 1,
+                Login = "tutu",
+                Password = HashManager.GetHash("ah$34!"),
+                Rights = ERights.ConceptionDevis
+            };
 
-            context.Users.AddOrUpdate(new User[] {
-                new User { Id=1, Login="tutu", Password=HashManager.GetHash("ah$34!"), Rights=ERights.ConceptionDevis }
-            });
+
+
+            context.Users.AddOrUpdate(new User[] { tutuUser });
 
             Client client = new Client {
                 Id = 1,
@@ -37,8 +44,29 @@ namespace ConceptionDevisWS.Migrations
                 City = "Pau",
                 ZipCode = 64000,
                 Email = "test.tartampion@laposte.net",
-                Birdthdate = new DateTime(1984, 11, 16, 0, 0, 0, DateTimeKind.Utc)
+                Birdthdate = new DateTime(1984, 11, 16, 0, 0, 0, DateTimeKind.Utc),
+                Phone = "0200094524",
+                User = tutuUser
             };
+
+            Client client2 = new Client
+            {
+                Id = 2,
+                FirstName = "Test2",
+                LastName = "LaTruffe",
+                Address = "12 rue Lagrange",
+                City = "Pau",
+                ZipCode = 64000,
+                Email = "test2.latruffe@gmail.com",
+                Birdthdate = new DateTime(1984, 11, 14, 0, 0, 0, DateTimeKind.Utc),
+                Phone = "0100094524",
+                User = tutuUser
+            };
+
+            context.Clients.AddOrUpdate(new Client[] { client, client2 });
+
+            
+            
 
             Project firstProj = new Project
             {
@@ -50,7 +78,7 @@ namespace ConceptionDevisWS.Migrations
                 TechnicalSheetPath = @"/techSheets/techSheet_1.pdf"
             };
 
-            context.Clients.AddOrUpdate(new Client[] { client });
+            
             context.Projects.AddOrUpdate(new Project[] {
                 firstProj
             });

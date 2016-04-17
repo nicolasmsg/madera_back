@@ -43,7 +43,7 @@ namespace ConceptionDevisWS.Services
 
         public async static Task<Module> CreateNew(Module newModule)
         {
-            if(newModule.Name == null)
+            if(newModule == null || newModule.Name == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
