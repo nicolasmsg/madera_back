@@ -12,6 +12,10 @@ namespace ConceptionDevisWS.MessageHandlers
     {
         private void AddCorsHeaders(HttpResponseMessage response, IEnumerable<string> requestHeaders)
         {
+            if(ConfigurationManager.AppSettings["AllowedDomains"] == null)
+            {
+                throw new ConfigurationErrorsException("La clé AllowedDomains doit être renseignée avec une liste de valeurs séparée par ; ou *");
+            }
             response.Headers.Add("Access-Control-Allow-Origin", ConfigurationManager.AppSettings["AllowedDomains"].Split(';'));
             response.Headers.Add("Access-Control-Allow-Methods", new string[] { "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" });
             response.Headers.Add("Access-Control-Allow-Headers", requestHeaders);

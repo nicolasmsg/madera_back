@@ -19,7 +19,8 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                return await ctx.Users.FirstOrDefaultAsync( u => u.Login.Equals(login, StringComparison.InvariantCultureIgnoreCase) );
+                return await ctx.Users.Include(u => u.Clients)
+                    .FirstOrDefaultAsync( u => u.Login.Equals(login, StringComparison.InvariantCultureIgnoreCase) );
             }
         }
 

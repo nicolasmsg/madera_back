@@ -20,7 +20,6 @@ namespace ConceptionDevisWS.Controllers
             base.Dispose(disposing);
         }
         
-        [Authorize]
         [Route("api/login")]
         [AcceptVerbs("POST")]
         public async Task<IHttpActionResult> Login(User user)
@@ -52,7 +51,6 @@ namespace ConceptionDevisWS.Controllers
             return await UserService.UpdateUser(id, user);
         }
 
-        [Authorize]
         [Route("api/registration")]
         [AcceptVerbs("POST")]
         public async Task<User> Register(User user)
