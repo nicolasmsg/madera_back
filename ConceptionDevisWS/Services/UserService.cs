@@ -1,29 +1,29 @@
 ﻿using ConceptionDevisWS.Models;
-using System.Threading.Tasks;
-using System.Data.Entity;
-using System;
-using System.Web.Http;
-using System.Net;
-using ConceptionDevisWS.Services.Utils;
-using System.Security.Principal;
-using System.Security.Claims;
-using System.Linq;
 using ConceptionDevisWS.Models.Auth;
+using ConceptionDevisWS.Services.Utils;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Security.Principal;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace ConceptionDevisWS.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class UserService
     {
-        public async static Task<User> FindUser(string login)
-        {
-            using (ModelsDBContext ctx = new ModelsDBContext())
-            {
-                return await ctx.Users.Include(u => u.Clients)
-                    .FirstOrDefaultAsync( u => u.Login.Equals(login, StringComparison.InvariantCultureIgnoreCase) );
-            }
-        }
-
+        
+        /// <summary>
+        /// Retrieve a <see cref="ConceptionDevisWS.Models.User"/>.
+        /// </summary>
+        /// <param name="id">the user's identity</param>
+        /// <returns>the given user</returns>
+        /// <exception cref="HttpResponseException">In case something went wront (for example the requested user doesn't exist).</exception>
         public async static Task<User> GetUser(int id)
 
         {
@@ -38,6 +38,10 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Retrieve all existing <see cref="ConceptionDevisWS.Models.User"/>s.
+        /// </summary>
+        /// <returns>a list of users</returns>
         public async static Task<IEnumerable<User>> GetAllUsers()
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -46,6 +50,11 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Create an <see cref="ConceptionDevisWS.Models.User"/>.
+        /// </summary>
+        /// <param name="user">the user to store</param>
+        /// <returns>the created user</returns>
         public async static Task<User> Register(User user)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -63,6 +72,12 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Create a Login resource.
+        /// </summary>
+        /// <param name="user">the user to log in</param>
+        /// <param name="baseAddress">the host to log into</param>
+        /// <returns>a login object with credential headers and a User with its Clients</returns>
         public async static Task<object> Login(User user, string baseAddress)
         {
             if(user == null || user.Password == null)
@@ -93,11 +108,23 @@ namespace ConceptionDevisWS.Services
             };
         }
 
+        /// <summary>
+        /// Indicate wether the user is logged out or not
+        /// </summary>
+        /// <param name="userPrincipal">the user's security identity</param>
+        /// <returns>true if the user is logger out, false otherwise</returns>
         public async static Task<bool> HasLoggedOut(IPrincipal userPrincipal)
         {
             return (await _findToken(userPrincipal.Identity.Name)) != null;
         }
 
+        /// <summary>
+        /// Logs a <see cref="ConceptionDevisWS.Models.User"/> out.
+        /// </summary>
+        /// <param name="principal">the user's security identity</param>
+        /// <remarks>
+        /// This is not fully \htmlonly <accronym title="REpresentational State Transfer">REST</accronym>\endhtmlonly compliant, but it's usual.
+        /// </remarks>
         public async static Task Logout(IPrincipal principal)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -108,6 +135,13 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Update completely an <see cref="ConceptionDevisWS.Models.User"/>.
+        /// </summary>
+        /// <param name="id">the user's identity</param>
+        /// <param name="newUser">the updated user</param>
+        /// <returns>the updated user</returns>
+        /// <exception cref="HttpResponseException">In case something went wront (for example the requested user doesn't exist).</exception>
         public async static Task<User> UpdateUser(int id, User newUser)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -123,6 +157,11 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Remove an <see cref="ConceptionDevisWS.Models.User"/>.
+        /// </summary>
+        /// <param name="id">the user's identity</param>
+        /// <exception cref="HttpResponseException">In case something went wront (for example the requested user doesn't exist).</exception>
         public async static Task RemoveUser(int id)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -130,6 +169,15 @@ namespace ConceptionDevisWS.Services
                 User seekedUser = await GetUser(id);
                 ctx.Entry(seekedUser).State = EntityState.Deleted;
                 await ctx.SaveChangesAsync();
+            }
+        }
+
+        private async static Task<User> FindUser(string login)
+        {
+            using (ModelsDBContext ctx = new ModelsDBContext())
+            {
+                return await ctx.Users.Include(u => u.Clients.Select(c => c.Projects) )
+                    .FirstOrDefaultAsync(u => u.Login.Equals(login, StringComparison.InvariantCultureIgnoreCase));
             }
         }
 

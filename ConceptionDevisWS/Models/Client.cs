@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
+//! Models are data containers without much behaviour (save initialization related).
 namespace ConceptionDevisWS.Models
 {
     public class Client : IIdentifiable
@@ -43,8 +44,8 @@ namespace ConceptionDevisWS.Models
         [IgnoreDataMember, XmlIgnore, JsonIgnore]
         public User User { get; set; }
 
-        // used to avoid recursive type serialization, also it'll be clear only MiniProject.Id will matter 
-        // for update operations (that's an association display entity)
+        //! used to avoid recursive type serialization, also it'll be clear only MiniProject.Id will matter 
+        //! for update operations (that's an association display entity)
         [NotMapped]
         [JsonProperty("Projects")]
         public List<MiniProject> MiniProjects

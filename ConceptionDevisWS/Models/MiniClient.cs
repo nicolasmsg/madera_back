@@ -2,6 +2,9 @@
 
 namespace ConceptionDevisWS.Models
 {
+    /// <summary>
+    /// Model used in web responses to prevent a recursive structure with <see cref="ConceptionDevisWS.Models.Project"/>.<see cref="ConceptionDevisWS.Models.Client"/>.<see cref="ConceptionDevisWS.Models.Project"/>s.
+    /// </summary>
     public class MiniClient
     {
         public int Id { get; set; }

@@ -1,3 +1,4 @@
+//! EntityFramework files to setup the database.
 namespace ConceptionDevisWS.Migrations
 {
     using Models;
@@ -6,6 +7,9 @@ namespace ConceptionDevisWS.Migrations
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
 
+    /// <summary>
+    /// Class used to initialize fixture (test) data.
+    /// </summary>
     internal sealed class Configuration : DbMigrationsConfiguration<ConceptionDevisWS.Models.ModelsDBContext>
     {
         public Configuration()
@@ -13,7 +17,10 @@ namespace ConceptionDevisWS.Migrations
             AutomaticMigrationsEnabled = false;
         }
         
-
+        /// <summary>
+        /// Fill the database with test data.
+        /// </summary>
+        /// <param name="context"></param>
         protected override void Seed(ConceptionDevisWS.Models.ModelsDBContext context)
         {
             Component sectionDroite = new Component { Id = 1, Name = "Section droite", Length = 4.0, AngleStr = "Droit" };

@@ -10,8 +10,21 @@ using System.Web.Http;
 
 namespace ConceptionDevisWS.Services.Utils
 {
+    /// <summary>
+    /// Handles Navigation property within EntityFramework in a disconnected scenario.
+    /// </summary>
+    /// <typeparam name="T">the type of the <see cref="ConceptionDevisWS.Models">Model</see> to manage</typeparam>
     public class ServiceHelper<T> where T : class, IIdentifiable
     {
+        /// <summary>
+        /// Update the destination's collection from the source and the storage
+        /// </summary>
+        /// <typeparam name="T2">type of the navigation property</typeparam>
+        /// <param name="src">the source</param>
+        /// <param name="dest">the destination</param>
+        /// <param name="context">the storage context to use</param>
+        /// <param name="getCollection">a function to retrieve the source's collection</param>
+        /// <param name="getCtxCollection">a function to retrieve the context's stored collection of all elements of type T2</param>
         public async static Task UpdateNavigationProperty<T2>(T src, T dest, DbContext context, 
             Func<T, ICollection<T2>> getCollection, 
             Func<DbContext, DbSet<T2>> getCtxCollection) 
@@ -26,6 +39,19 @@ namespace ConceptionDevisWS.Services.Utils
             await AddAllElementsFromContext(src, dest, context, getCollection, getCtxCollection);
         }
 
+        /// <summary>
+        /// Let EntityFramework know a collection of related entities already exists.
+        /// </summary>
+        /// <remarks>
+        /// When we create an entity X we do not create any associated entities in a single request,
+        /// but we can still associate our new entity with others pre-existing ones in one go, that's what this method is intended for.
+        /// </remarks>
+        /// <typeparam name="T2">a collection type</typeparam>
+        /// <param name="src">the object which collection will be initialized in EntityFramework's context management</param>
+        /// <param name="context">the storage context</param>
+        /// <param name="getCollection">a function to retrieve the collection from the source</param>
+        /// <param name="getCtxCollection">a function to retrieve the collection of existing entities from the storage context</param>
+        /// <returns></returns>
         public async static Task InitNavigationProperty<T2>(T src, DbContext context,
             Func<T, ICollection<T2>> getCollection, Func<DbContext, DbSet<T2>> getCtxCollection) 
             where T2 : class, IIdentifiable
@@ -53,6 +79,15 @@ namespace ConceptionDevisWS.Services.Utils
             }
         }
 
+        /// <summary>
+        /// Let EntityFramework a single related entity already exists.
+        /// </summary>
+        /// <typeparam name="T2">the related entity's type</typeparam>
+        /// <param name="src">the source associated with that related entity</param>
+        /// <param name="context">the storage context</param>
+        /// <param name="singlePropExpr">a function used to retrieve the associated property from the source</param>
+        /// <param name="getCtxSingleProp">a function to retrieve the associated property from the storage context</param>
+        /// <param name="setSingleProp">a function to define the associated property on the source</param>
         public async static Task LoadSingleNavigationProperty<T2>(T src, DbContext context,
             Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, Action<T, T2> setSingleProp)
             where T2 :class, IIdentifiable
@@ -68,7 +103,16 @@ namespace ConceptionDevisWS.Services.Utils
             }
         }
 
-
+        /// <summary>
+        /// Update a single related entity from a source to a destination
+        /// </summary>
+        /// <typeparam name="T2">the related entity's type</typeparam>
+        /// <param name="src">the source associated with that related entity</param>
+        /// <param name="dest">the destination which related entity will be updated</param>
+        /// <param name="context">the storage context</param>
+        /// <param name="singlePropExpr">a function used to retrieve the associated property from the source</param>
+        /// <param name="getCtxSingleProp">a function to retrieve the associated property from the storage context</param>
+        /// <param name="setSingleProp">a function to define the associated property on the source</param>
         public async static Task SetSingleNavigationProperty<T2>(T src, T dest, DbContext context,
           Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, Action<T, T2> setSingleProp)
             where T2 : class, IIdentifiable

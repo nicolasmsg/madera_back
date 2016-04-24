@@ -1,16 +1,25 @@
 ﻿using ConceptionDevisWS.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Data.Entity;
-using System.Web.Http;
-using System.Net;
 using ConceptionDevisWS.Services.Utils;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Http;
 
+//! \brief Business layer handling the data access.
+//!
+//! It's justified here as the only business is to provide data.
 namespace ConceptionDevisWS.Services
 {
+    /// <summary>
+    /// A Service to manage a <see cref="ConceptionDevisWS.Models.Client"/>'s business.
+    /// </summary>
     public static class ClientService
     {
+        /// <summary>
+        /// Retrieve all existing <see cref="ConceptionDevisWS.Models.Client"/>s with their <see cref="ConceptionDevisWS.Models.Project"/>s.
+        /// </summary>
+        /// <returns>a list of clients</returns>
         public async static Task<IEnumerable<Client>> GetAllClients()
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -19,6 +28,12 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Retrieve the given <see cref="ConceptionDevisWS.Models.Client"/>.
+        /// </summary>
+        /// <param name="id">the client's identity</param>
+        /// <returns>the client</returns>
+        /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested client does not exists).</exception>
         public async static Task<Client> GetClient(int id)
         {
             if(id==0)
@@ -36,6 +51,12 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Remove the given <see cref="ConceptionDevisWS.Models.Client"/> from storage.
+        /// </summary>
+        /// <param name="id">the client's identity</param>
+        /// <returns>The request's HttpStatusCode</returns>
+        /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested client does not exists).</exception>
         public async static Task RemoveClient(int id)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -46,6 +67,12 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Create a new <see cref="ConceptionDevisWS.Models.Client"/>.
+        /// </summary>
+        /// <param name="newClient">the client to store</param>
+        /// <returns>the stored client</returns>
+        /// <exception cref="HttpResponseException">In case something went wrong (when the given client is null).</exception>
         public async static Task<Client> CreateNew(Client newClient)
         {
             if(newClient == null || newClient.FirstName == null || newClient.LastName == null)
@@ -62,6 +89,13 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Update completely the given <see cref="ConceptionDevisWS.Models.Client"/>.
+        /// </summary>
+        /// <param name="id">the client's identity</param>
+        /// <param name="newClient">the updated client to store</param>
+        /// <returns>the updated client</returns>
+        /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested client does not exists).</exception>
         public async static Task<Client> UpdateClient(int id, Client newClient)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())

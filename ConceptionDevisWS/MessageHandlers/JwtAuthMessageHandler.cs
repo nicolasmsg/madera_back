@@ -1,21 +1,27 @@
 ﻿using ConceptionDevisWS.Services;
 using ConceptionDevisWS.Services.Utils;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace ConceptionDevisWS.MessageHandlers
 {
+    /// <summary>
+    /// Class to handle token based authentication (to be used over crypted protocol such as https)
+    /// </summary>
     public class JwtAuthMessageHandler : DelegatingHandler
     {
+        /// <summary>
+        /// Check the request's token, and if it's a valid jwt token, send the request through next handler down to the controller.
+        /// </summary>
+        /// <param name="request">the http request</param>
+        /// <param name="cancellationToken">a token to cancel the request from another thread</param>
+        /// <returns></returns>
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             

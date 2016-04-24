@@ -1,13 +1,16 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
-
+//! Classes responsible for handling HTTP messages : that's to say generate an HttpResponse to fullfill an HttpRequest.
 namespace ConceptionDevisWS.MessageHandlers
 {
+    /// <summary>
+    /// MessageHandler to handle \htmlonly <acronym title="Cross Origin Resource Sharing">CORS</acronym>\endhtmlonly related http headers.
+    /// </summary>
     public class CorsMessageHandler : DelegatingHandler
     {
         private void AddCorsHeaders(HttpResponseMessage response, IEnumerable<string> requestHeaders)
@@ -21,6 +24,15 @@ namespace ConceptionDevisWS.MessageHandlers
             response.Headers.Add("Access-Control-Allow-Headers", requestHeaders);
         }
 
+        /// <summary>
+        /// Add CORS http headers.
+        /// </summary>
+        /// <remarks>
+        /// Headers set here : (Access-Control-Allow-Origin,Access-Control-Allow-Methods,Access-Control-Allow-Headers)
+        /// </remarks>
+        /// <param name="request">the request</param>
+        /// <param name="cancellationToken">a token to cancel the request from antoher thread</param>
+        /// <returns>the http response</returns>
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if (request.Headers.Contains("Origin"))

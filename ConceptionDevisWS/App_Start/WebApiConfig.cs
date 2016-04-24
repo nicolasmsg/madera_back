@@ -2,13 +2,17 @@
 
 namespace ConceptionDevisWS
 {
+    /// <summary>
+    /// Configures the routes for this WebService
+    /// </summary>
     public static class WebApiConfig
     {
+        /// <summary>
+        /// Register the routing configuration
+        /// </summary>
+        /// <param name="config">The routing configuration</param>
         public static void Register(HttpConfiguration config)
         {
-            // Configuration et services API Web
-
-            // Itinéraires de l'API Web
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(

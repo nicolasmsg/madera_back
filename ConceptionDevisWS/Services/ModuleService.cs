@@ -8,8 +8,15 @@ using System.Web.Http;
 
 namespace ConceptionDevisWS.Services
 {
+    /// <summary>
+    /// A Service to manager <see cref="ConceptionDevisWS.Models.Module"/>'s business.
+    /// </summary>
     public static class ModuleService
     {
+        /// <summary>
+        /// Retrieve all existing <see cref="ConceptionDevisWS.Models.Module"/>s with their <see cref="ConceptionDevisWS.Models.Component"/>s. 
+        /// </summary>
+        /// <returns>a list of modules</returns>
         public async static Task<IEnumerable<Module>> GetAllModules()
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -18,6 +25,12 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Retrieve the given <see cref="ConceptionDevisWS.Models.Module"/>.
+        /// </summary>
+        /// <param name="id">the module's identity</param>
+        /// <returns>the given module</returns>
+        /// <exception cref="HttpResponseException">In case something went wront (for example, the given module is not found).</exception>
         public async static Task<Module> GetModule(int id)
         {
             using(ModelsDBContext ctx = new ModelsDBContext())
@@ -31,6 +44,11 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Remove the given module from storage.
+        /// </summary>
+        /// <param name="id">the module's identity</param>
+        /// <exception cref="HttpResponseException">In case something went wront (for example, the given module is not found).</exception>
         public async static Task RemoveModule(int id)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
@@ -41,6 +59,12 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Create a new <see cref="ConceptionDevisWS.Models.Module"/>.
+        /// </summary>
+        /// <param name="newModule">the module to store</param>
+        /// <returns>the created module</returns>
+        /// <exception cref="HttpResponseException">In case something went wront (when the given module is null).</exception>
         public async static Task<Module> CreateNew(Module newModule)
         {
             if(newModule == null || newModule.Name == null)
@@ -60,12 +84,11 @@ namespace ConceptionDevisWS.Services
         /// <summary>
         /// Update a given module
         /// 
-        /// only components associations can be updated : if we try to update an associated component this change will get ignored as reflected by the response
-        /// in pure REST we should only return api/components/{id} links with components ids
+        /// only components associations can be updated
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="newModule"></param>
-        /// <returns></returns>
+        /// <param name="id">the module's identity</param>
+        /// <param name="newModule">the updated module to store</param>
+        /// <returns>the updated module</returns>
         public async static Task<Module> UpdateModule(int id, Module newModule)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())

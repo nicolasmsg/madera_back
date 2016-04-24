@@ -25,8 +25,7 @@ namespace ConceptionDevisWS.Models
         public string Name { get; set; }
         [Column("Longueur")]
         public double Length { get; set; }
-        // prevent self referencing loop within response serialization as (module being a recursive structure with  Module.Components[i].Modules
-        //  cause troubles to serialization process)
+        //! Hidden from web service's response and not updatable either (use compoment to update its modules instead).
         [IgnoreDataMember, XmlIgnore,JsonIgnore]
         public List<Module> Modules { get; set; }
 

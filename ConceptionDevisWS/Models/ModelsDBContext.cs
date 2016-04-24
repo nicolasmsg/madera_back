@@ -3,6 +3,9 @@ using System.Data.Entity;
 
 namespace ConceptionDevisWS.Models
 {
+    /// <summary>
+    /// Storage connection class managed by EntityFramework.
+    /// </summary>
     public class ModelsDBContext : DbContext
     {
         public DbSet<Module> Modules { get; set; }
