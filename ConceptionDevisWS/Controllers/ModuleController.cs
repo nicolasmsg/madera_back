@@ -7,7 +7,7 @@ using System.Web.Http;
 namespace ConceptionDevisWS.Controllers
 {
     /// <summary>
-    /// Controller to manage <see cref="Module"/>s.
+    /// Controller to manage <see cref="ConceptionDevisWS.Models.Module"/>s.
     /// </summary>
     public class ModuleController : ApiController
     {

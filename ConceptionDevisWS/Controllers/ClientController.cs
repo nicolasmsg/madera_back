@@ -8,7 +8,7 @@ using System.Web.Http;
 namespace ConceptionDevisWS.Controllers
 {
     /// <summary>
-    /// Controller to manage <see cref="Client"/>s.
+    /// Controller to manage <see cref="ConceptionDevisWS.Models.Client"/>s.
     /// </summary>
     public class ClientController : ApiController
     {

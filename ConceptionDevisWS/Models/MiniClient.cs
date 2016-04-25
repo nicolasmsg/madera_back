@@ -23,7 +23,7 @@ namespace ConceptionDevisWS.Models
         public MiniClient(Client client)
         {
             Id = client.Id;
-            Reference = client.Referrence;
+            Reference = client.Reference;
             FirstName = client.FirstName;
             LastName = client.LastName;
             Address = client.Address;

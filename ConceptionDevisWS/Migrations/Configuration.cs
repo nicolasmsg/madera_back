@@ -90,6 +90,138 @@ namespace ConceptionDevisWS.Migrations
                 firstProj
             });
 
+            Range nature = new Range
+            {
+                Id = 1,
+                Name = "Nature",
+                ExtFinishings = new List<EExtFinishing> { EExtFinishing.Wood },
+                FrameQualities = new List<EFrameQuality> { EFrameQuality.Wood },
+                Insulators = EInsulatorKind.RockWool,
+                FrameStructure = EFrameStructure.Angleless
+            };
+
+            Range bois = new Range
+            {
+                Id = 2,
+                Name = "Bois",
+                ExtFinishings = new List<EExtFinishing> { EExtFinishing.Wood, EExtFinishing.Roughcast },
+                FrameQualities = new List<EFrameQuality> { EFrameQuality.Wood, EFrameQuality.PVC },
+                Insulators = EInsulatorKind.Styrofoam,
+                FrameStructure = EFrameStructure.OpenAngle
+            };
+
+            Range couleur = new Range
+            {
+                Id = 3,
+                Name = "Couleurs",
+                ExtFinishings = new List<EExtFinishing> { EExtFinishing.Roughcast, EExtFinishing.Paint },
+                FrameQualities = new List<EFrameQuality> { EFrameQuality.Wood, EFrameQuality.PVC },
+                Insulators = EInsulatorKind.GlassWool,
+                FrameStructure = EFrameStructure.ClosedAngle
+            };
+
+            context.Ranges.AddOrUpdate(nature, bois, couleur);
+
+            Model maison3ChSdb = new Model
+            {
+                Name = "Maison 3 Chambres",
+                BasePricePercentage = 15.00,
+                Filling = EFillingKind.NaturalWool,
+                IntFinishing = EIntFinishing.Plasterboard,
+                ExtFinishing = EExtFinishing.Roughcast,
+                FrameQuality = EFrameQuality.Wood,
+                Range = bois
+            };
+
+            Model villaAvecTerrasse = new Model
+            {
+                Name = "Maison a étage",
+                BasePricePercentage = 25.00,
+                Filling = EFillingKind.NaturalWool,
+                IntFinishing = EIntFinishing.Plasterboard,
+                ExtFinishing = EExtFinishing.Roughcast,
+                FrameQuality = EFrameQuality.PVC,
+                Range = bois
+            };
+
+            Model maison2ChJardin = new Model
+            {
+                Name = "Maison 2 Chambres avec jardin",
+                BasePricePercentage = 18.00,
+                Filling = EFillingKind.NaturalWool,
+                IntFinishing = EIntFinishing.Styrofoam,
+                ExtFinishing = EExtFinishing.Wood,
+                FrameQuality = EFrameQuality.Wood,
+                Range = bois
+            };
+
+            Model chalet2Ch = new Model
+            {
+                Name = "Chalet 2 Chambres",
+                BasePricePercentage = 35.00,
+                Filling = EFillingKind.NaturalWool,
+                IntFinishing = EIntFinishing.Plasterboard,
+                ExtFinishing = EExtFinishing.Wood,
+                FrameQuality = EFrameQuality.Wood,
+                Range = nature
+            };
+
+            Model abrisMontagnard = new Model
+            {
+                Name = "Abris Montagnard",
+                BasePricePercentage = 28.00,
+                Filling = EFillingKind.Hemp,
+                IntFinishing = EIntFinishing.Styrofoam,
+                ExtFinishing = EExtFinishing.Wood,
+                FrameQuality = EFrameQuality.Wood,
+                Range = nature
+            };
+
+            Model villaAvecPiscine = new Model
+            {
+                Name = "Villa avec piscine",
+                BasePricePercentage = 40.00,
+                Filling = EFillingKind.NaturalWool,
+                IntFinishing = EIntFinishing.Wood,
+                ExtFinishing = EExtFinishing.Wood,
+                FrameQuality = EFrameQuality.Wood,
+                Range = nature
+            };
+
+            Model creche = new Model
+            {
+                Name = "Creche",
+                BasePricePercentage = 8.00,
+                Filling = EFillingKind.WoodenWool,
+                IntFinishing = EIntFinishing.Plasterboard,
+                ExtFinishing = EExtFinishing.Roughcast,
+                FrameQuality = EFrameQuality.PVC,
+                Range = couleur
+            };
+
+            Model localProCrea = new Model
+            {
+                Name = "Local Professionnel (Créatif)",
+                BasePricePercentage = 12.00,
+                Filling = EFillingKind.WoodenWool,
+                IntFinishing = EIntFinishing.Wood,
+                ExtFinishing = EExtFinishing.Paint,
+                FrameQuality = EFrameQuality.PVC,
+                Range = couleur
+            };
+
+            Model localProDesign = new Model
+            {
+                Name = "Local Professionnel (Design)",
+                BasePricePercentage = 15.00,
+                Filling = EFillingKind.Hemp,
+                IntFinishing = EIntFinishing.Wood,
+                ExtFinishing = EExtFinishing.Roughcast,
+                FrameQuality = EFrameQuality.PVC,
+                Range = couleur
+            };
+
+            context.Models.AddOrUpdate(maison3ChSdb, villaAvecTerrasse, maison2ChJardin, chalet2Ch, abrisMontagnard, villaAvecPiscine, creche, localProCrea, localProDesign);
         }
 
     }

@@ -20,6 +20,10 @@ namespace ConceptionDevisWS.Models
 
         public DbSet<RevokedToken> RevokedTokens { get; set; }
 
+        public DbSet<Range> Ranges { get; set; }
+
+        public DbSet<Model> Models { get; set; }
+
         public ModelsDBContext() 
             :base("db")
         { }

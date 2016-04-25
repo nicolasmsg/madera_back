@@ -13,7 +13,7 @@ namespace ConceptionDevisWS.Models
     {
         public int Id { get; set; }
         [StringLength(50), Index(IsUnique=true)]
-        public string Referrence
+        public string Reference
         {
             get { return "CLI-" + Id; }
         }
