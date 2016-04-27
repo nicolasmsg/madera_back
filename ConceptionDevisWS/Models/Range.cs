@@ -20,11 +20,11 @@ namespace ConceptionDevisWS.Models
         }
 
         [Column("FinitionsExterieures")]
-        public List<EExtFinishing> ExtFinishings { get; set; }
+        public EExtFinishing ExtFinishings { get; set; }
         [Column("TypeIsolant")]
         public EInsulatorKind Insulators { get; set; }
         [Column("QualiteHuisserie")]
-        public List<EFrameQuality> FrameQualities { get; set; }
+        public EFrameQuality FrameQualities { get; set; }
         [Column("ConceptionOssature")]
         public EFrameStructure FrameStructure { get; set; }
 

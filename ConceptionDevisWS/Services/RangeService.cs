@@ -50,7 +50,7 @@ namespace ConceptionDevisWS.Services
         }
 
         /// <summary>
-        /// Remove the given <see cref="ConceptionDevisWS.Models.Range"/> from storage.
+        /// Remove the given <see cref="ConceptionDevisWS.Models.Range"/> and its <see cref="ConceptionDevisWS.Models.Model"/>s from storage.
         /// </summary>
         /// <param name="id">the range's identity</param>
         /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested range does not exists).</exception>
@@ -60,6 +60,7 @@ namespace ConceptionDevisWS.Services
             {
                 Range seekedRange = await GetRange(id);
                 ctx.Entry(seekedRange).State = EntityState.Deleted;
+                ctx.Entry(seekedRange).Collection(r => r.Models).EntityEntry.State = EntityState.Deleted;
                 await ctx.SaveChangesAsync();
             }
         }

@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Linq;
+using System;
 
 //! \brief Business layer handling the data access.
 //!
@@ -51,6 +53,7 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        // TODO: Hide the special client madera (id=1)
         /// <summary>
         /// Remove the given <see cref="ConceptionDevisWS.Models.Client"/> from storage.
         /// </summary>
@@ -62,8 +65,23 @@ namespace ConceptionDevisWS.Services
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 Client seekedClient = await GetClient(id);
+                Client maderaClient = await ctx.Clients.FindAsync(1);
+                IEnumerable<Task> tasks = seekedClient.Projects.Select(p => {
+                    return ProjectService.SpecialUpdateProject(p.Client.Id, maderaClient.Id, p.Id, p);
+                });
+                await Task.WhenAll(tasks);
+                ctx.Entry(seekedClient).Collection(c => c.Projects).EntityEntry.State = EntityState.Modified;
+                seekedClient.Projects.Clear();
                 ctx.Entry(seekedClient).State = EntityState.Deleted;
                 await ctx.SaveChangesAsync();
+            }
+        }
+
+        public async static Task<Client> GetMaderaClient()
+        {
+            using (ModelsDBContext ctx = new ModelsDBContext())
+            {
+                return await ctx.Clients.FirstAsync(c => c.FirstName == "Madera" && c.ZipCode == -1);
             }
         }
 

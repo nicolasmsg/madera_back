@@ -115,6 +115,36 @@ namespace ConceptionDevisWS.Services
             }
         }
 
+        /// <summary>
+        /// Internal use only, Update completely a given <see cref="ConceptionDevisWS.Models.Project"/> Including its <see cref="ConceptionDevisWS.Models.Client"/>.
+        /// </summary>
+        /// <param name="originalClientId">the original client's identity</param>
+        /// <param name="newClientId">the new client's identity</param>
+        /// <param name="id">the project's identity</param>
+        /// <param name="newProject">the updated project (possibly with a different client) </param>
+        /// <returns>the updated project</returns>
+        /// <exception cref="HttpResponseException">In case either the client or project doesn't exist.</exception>
+        public async static Task<Project> SpecialUpdateProject(int originalClientId, int newClientId, int id, Project newProject)
+        {
+            using (ModelsDBContext ctx = new ModelsDBContext())
+            {
+                if (newProject.Client == null)
+                {
+                    newProject.Client = new Client();
+                }
+                newProject.Client.Id = newClientId;
+
+                Project seekedProject = await _searchClientProject(originalClientId, id);
+                ctx.Entry(seekedProject).State = EntityState.Modified;
+                await ServiceHelper<Project>.SetSingleNavigationProperty<Client>(newProject, seekedProject, ctx, p => p.Client, _getCtxClients, _setClient);
+
+                seekedProject.UpdateNonComposedPropertiesFrom(newProject);
+                await ctx.SaveChangesAsync();
+                return seekedProject;
+
+            }
+        }
+
         private async static Task<Client> _searchClient(int clientId)
         {
             return await ClientService.GetClient(clientId);

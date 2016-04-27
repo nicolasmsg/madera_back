@@ -43,8 +43,10 @@ namespace ConceptionDevisWS.Migrations
 
             context.Users.AddOrUpdate(new User[] { tutuUser });
 
+            
+
             Client client = new Client {
-                Id = 1,
+                Id = 2,
                 FirstName = "Test",
                 LastName = "Tartampion",
                 Address = "10 rue Lagrange",
@@ -58,7 +60,7 @@ namespace ConceptionDevisWS.Migrations
 
             Client client2 = new Client
             {
-                Id = 2,
+                Id = 3,
                 FirstName = "Test2",
                 LastName = "LaTruffe",
                 Address = "12 rue Lagrange",
@@ -70,7 +72,16 @@ namespace ConceptionDevisWS.Migrations
                 User = tutuUser
             };
 
-            context.Clients.AddOrUpdate(new Client[] { client, client2 });
+            Client maderaClient = new Client
+            {
+                Id = 1,
+                FirstName = "Madera",
+                LastName = "",
+                Birdthdate = DateTime.ParseExact("16/02/1988", "dd/MM/yyyy", null),
+                ZipCode = -1
+            };
+
+            context.Clients.AddOrUpdate(new Client[] { maderaClient, client, client2 });
 
             
             
@@ -94,8 +105,8 @@ namespace ConceptionDevisWS.Migrations
             {
                 Id = 1,
                 Name = "Nature",
-                ExtFinishings = new List<EExtFinishing> { EExtFinishing.Wood },
-                FrameQualities = new List<EFrameQuality> { EFrameQuality.Wood },
+                ExtFinishings = EExtFinishing.Wood,
+                FrameQualities = EFrameQuality.Wood,
                 Insulators = EInsulatorKind.RockWool,
                 FrameStructure = EFrameStructure.Angleless
             };
@@ -104,8 +115,8 @@ namespace ConceptionDevisWS.Migrations
             {
                 Id = 2,
                 Name = "Bois",
-                ExtFinishings = new List<EExtFinishing> { EExtFinishing.Wood, EExtFinishing.Roughcast },
-                FrameQualities = new List<EFrameQuality> { EFrameQuality.Wood, EFrameQuality.PVC },
+                ExtFinishings = EExtFinishing.Wood | EExtFinishing.Roughcast,
+                FrameQualities = EFrameQuality.Wood | EFrameQuality.PVC,
                 Insulators = EInsulatorKind.Styrofoam,
                 FrameStructure = EFrameStructure.OpenAngle
             };
@@ -114,8 +125,8 @@ namespace ConceptionDevisWS.Migrations
             {
                 Id = 3,
                 Name = "Couleurs",
-                ExtFinishings = new List<EExtFinishing> { EExtFinishing.Roughcast, EExtFinishing.Paint },
-                FrameQualities = new List<EFrameQuality> { EFrameQuality.Wood, EFrameQuality.PVC },
+                ExtFinishings = EExtFinishing.Roughcast | EExtFinishing.Paint,
+                FrameQualities = EFrameQuality.Wood | EFrameQuality.PVC,
                 Insulators = EInsulatorKind.GlassWool,
                 FrameStructure = EFrameStructure.ClosedAngle
             };
@@ -222,6 +233,8 @@ namespace ConceptionDevisWS.Migrations
             };
 
             context.Models.AddOrUpdate(maison3ChSdb, villaAvecTerrasse, maison2ChJardin, chalet2Ch, abrisMontagnard, villaAvecPiscine, creche, localProCrea, localProDesign);
+            
+            
         }
 
     }

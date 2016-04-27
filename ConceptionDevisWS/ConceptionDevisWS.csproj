@@ -187,6 +187,14 @@
     <Compile Include="Migrations\201604251917483_AddedRangeAndModels.Designer.cs">
       <DependentUpon>201604251917483_AddedRangeAndModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604261853041_MadeModelsRangeMandatory.cs" />
+    <Compile Include="Migrations\201604261853041_MadeModelsRangeMandatory.Designer.cs">
+      <DependentUpon>201604261853041_MadeModelsRangeMandatory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.cs" />
+    <Compile Include="Migrations\201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.Designer.cs">
+      <DependentUpon>201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -286,6 +294,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604251917483_AddedRangeAndModels.resx">
       <DependentUpon>201604251917483_AddedRangeAndModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604261853041_MadeModelsRangeMandatory.resx">
+      <DependentUpon>201604261853041_MadeModelsRangeMandatory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.resx">
+      <DependentUpon>201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

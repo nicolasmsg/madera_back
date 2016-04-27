@@ -22,16 +22,19 @@ namespace ConceptionDevisWS.Models
         
         public MiniClient(Client client)
         {
-            Id = client.Id;
-            Reference = client.Reference;
-            FirstName = client.FirstName;
-            LastName = client.LastName;
-            Address = client.Address;
-            City = client.City;
-            ZipCode = client.ZipCode;
-            Phone = client.Phone;
-            Email = client.Email;
-            Birdthdate = client.Birdthdate;
+            if (client != null)
+            {
+                Id = client.Id;
+                Reference = client.Reference;
+                FirstName = client.FirstName;
+                LastName = client.LastName;
+                Address = client.Address;
+                City = client.City;
+                ZipCode = client.ZipCode;
+                Phone = client.Phone;
+                Email = client.Email;
+                Birdthdate = client.Birdthdate;
+            }
         } 
 
     }

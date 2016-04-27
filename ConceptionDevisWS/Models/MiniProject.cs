@@ -18,12 +18,15 @@ namespace ConceptionDevisWS.Models
 
         public MiniProject(Project project)
         {
-            Id = project.Id;
-            Reference = project.Reference;
-            Name = project.Name;
-            State = project.State;
-            CreationDate = project.CreationDate;
-            TechnicalSheetPath = project.TechnicalSheetPath;
+            if (project != null)
+            {
+                Id = project.Id;
+                Reference = project.Reference;
+                Name = project.Name;
+                State = project.State;
+                CreationDate = project.CreationDate;
+                TechnicalSheetPath = project.TechnicalSheetPath;
+            }
         }
     }
 }
