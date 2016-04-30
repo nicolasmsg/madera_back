@@ -1,13 +1,12 @@
-﻿using System;
+﻿using ConceptionDevisWS.Models;
+using ConceptionDevisWS.Services.Utils;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using ConceptionDevisWS.Models;
 using System.Data.Entity;
 using System.Linq;
-using System.Web.Http;
 using System.Net;
-using ConceptionDevisWS.Services.Utils;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace ConceptionDevisWS.Services
 {

@@ -2,11 +2,10 @@
 using ConceptionDevisWS.Services.Utils;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Linq;
-using System;
 
 //! \brief Business layer handling the data access.
 //!
@@ -26,7 +25,9 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                return await ctx.Clients.Include( c => c.Projects ).ToListAsync<Client>();
+                return await ctx.Clients.Include( c => c.Projects )
+                    .Where( c => c.Id != 1)
+                    .ToListAsync<Client>();
             }
         }
 
@@ -38,7 +39,7 @@ namespace ConceptionDevisWS.Services
         /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested client does not exists).</exception>
         public async static Task<Client> GetClient(int id)
         {
-            if(id==0)
+            if(id == 0 || id == 1)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
@@ -53,7 +54,6 @@ namespace ConceptionDevisWS.Services
             }
         }
 
-        // TODO: Hide the special client madera (id=1)
         /// <summary>
         /// Remove the given <see cref="ConceptionDevisWS.Models.Client"/> from storage.
         /// </summary>
