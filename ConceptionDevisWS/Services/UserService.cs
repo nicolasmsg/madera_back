@@ -87,7 +87,7 @@ namespace ConceptionDevisWS.Services
 
             string hashedPassword = HashManager.GetHash(user.Password);
             user.Password = hashedPassword;
-            User seekedUser = await FindUser(user.Login);
+            User seekedUser = await _findUser(user.Login);
 
             if (seekedUser == null || hashedPassword != seekedUser.Password)
             {
@@ -116,6 +116,11 @@ namespace ConceptionDevisWS.Services
         public async static Task<bool> HasLoggedOut(IPrincipal userPrincipal)
         {
             return (await _findToken(userPrincipal.Identity.Name)) != null;
+        }
+
+        public async static Task<User> GetUser(IPrincipal userPrincipal)
+        {
+            return await _findUser(userPrincipal.Identity.Name);
         }
 
         /// <summary>
@@ -172,7 +177,7 @@ namespace ConceptionDevisWS.Services
             }
         }
 
-        private async static Task<User> FindUser(string login)
+        private async static Task<User> _findUser(string login)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {

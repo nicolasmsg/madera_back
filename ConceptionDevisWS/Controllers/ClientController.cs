@@ -63,6 +63,7 @@ namespace ConceptionDevisWS.Controllers
         [AcceptVerbs("PUT")]
         public async Task<Client> PutClient(int id, Client newClient)
         {
+            _setUser(newClient);
             return await ClientService.UpdateClient(id, newClient);
         }
 
@@ -77,7 +78,15 @@ namespace ConceptionDevisWS.Controllers
         [AcceptVerbs("POST")]
         public async Task<Client> PostClient(Client newClient)
         {
+            _setUser(newClient);
             return await ClientService.CreateNew(newClient);
+        }
+
+
+        private void _setUser(Client client)
+        {
+            User currentUser = Request.Properties["User"] as User;
+            client.User = currentUser;
         }
     }
 }

@@ -101,6 +101,7 @@ namespace ConceptionDevisWS.Services
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 await ServiceHelper<Client>.InitNavigationProperty<Project>(newClient, ctx, _getProjects, _getCtxProjects);
+                await ServiceHelper<Client>.LoadSingleNavigationProperty<User>(newClient, ctx, c => c.User, _getCtxUsers, _setUser);
                 ctx.Clients.Add(newClient);
                 await ctx.SaveChangesAsync();
                 return newClient;
@@ -121,8 +122,10 @@ namespace ConceptionDevisWS.Services
                 Client seekedClient = await GetClient(id);
                 ctx.Entry(seekedClient).State = EntityState.Modified;
                 ctx.Entry(seekedClient).Collection(c => c.Projects).EntityEntry.State = EntityState.Modified;
+                ctx.Entry(seekedClient).Reference(c => c.User).EntityEntry.State = EntityState.Modified;
 
                 await ServiceHelper<Client>.UpdateNavigationProperty<Project>(newClient, seekedClient, ctx, _getProjects, _getCtxProjects);
+                await ServiceHelper<Client>.SetSingleNavigationProperty<User>(newClient, seekedClient, ctx, c => c.User, _getCtxUsers, _setUser);
                 seekedClient.UpdateNonComposedPropertiesFrom(newClient);
                 await ctx.SaveChangesAsync();
                 return seekedClient;
@@ -138,6 +141,16 @@ namespace ConceptionDevisWS.Services
         private static DbSet<Project> _getCtxProjects(DbContext dbContext)
         {
             return ((ModelsDBContext)dbContext).Projects;
+        }
+
+        private static DbSet<User> _getCtxUsers(DbContext dbContext)
+        {
+            return ((ModelsDBContext)dbContext).Users;
+        }
+
+        private static void _setUser(Client client, User user)
+        {
+            client.User = user;
         }
     }
 }

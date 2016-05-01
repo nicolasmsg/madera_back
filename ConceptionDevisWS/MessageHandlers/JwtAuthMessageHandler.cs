@@ -1,4 +1,5 @@
-﻿using ConceptionDevisWS.Services;
+﻿using ConceptionDevisWS.Models;
+using ConceptionDevisWS.Services;
 using ConceptionDevisWS.Services.Utils;
 using System;
 using System.IdentityModel.Tokens;
@@ -57,8 +58,9 @@ namespace ConceptionDevisWS.MessageHandlers
                     // we do not throw a SecurityTokenExpiredException as Exception catching is time consumming
                     return request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Timeout");
                 }
-
+                User currentUser = await UserService.GetUser(identifiedUser);
                 request.GetRequestContext().Principal = identifiedUser;
+                request.Properties.Add("User", currentUser);
                 return await base.SendAsync(request, cancellationToken);
             }
             catch (SecurityTokenExpiredException)

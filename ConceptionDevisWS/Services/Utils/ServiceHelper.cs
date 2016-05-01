@@ -80,7 +80,7 @@ namespace ConceptionDevisWS.Services.Utils
         }
 
         /// <summary>
-        /// Let EntityFramework a single related entity already exists.
+        /// Let EntityFramework knows a single related entity already exists.
         /// </summary>
         /// <typeparam name="T2">the related entity's type</typeparam>
         /// <param name="src">the source associated with that related entity</param>
