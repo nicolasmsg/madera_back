@@ -50,8 +50,11 @@ namespace ConceptionDevisWS.Models
             get { return _stateStr; }
             set
             {
-                _stateStr = value;
-                _state = (EProjectState)Enum.Parse(typeof(EProjectState), _stateStr);
+                if(value != null)
+                {
+                    _stateStr = value;
+                    _state = (EProjectState)Enum.Parse(typeof(EProjectState), _stateStr);
+                }
             }
         }
         [NotMapped]
