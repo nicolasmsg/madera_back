@@ -199,6 +199,7 @@
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Component.cs" />
+    <Compile Include="Models\Converters\CulturalEnumStringConverter.cs" />
     <Compile Include="Models\EAngle.cs" />
     <Compile Include="Models\EExtFinishing.cs" />
     <Compile Include="Models\EFillingKind.cs" />
@@ -227,9 +228,34 @@
     <Compile Include="Services\Utils\HashManager.cs" />
     <Compile Include="Services\Utils\JsonWebTokenManager.cs" />
     <Compile Include="Services\Utils\ServiceHelper.cs" />
+    <Compile Include="Translations.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Translations.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Translations.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Translations.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Translations.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Translations.fr-FR.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <EmbeddedResource Include="Translations.en-US.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translations.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Translations.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translations.fr-FR.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -300,6 +326,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.resx">
       <DependentUpon>201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Translations.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translations.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

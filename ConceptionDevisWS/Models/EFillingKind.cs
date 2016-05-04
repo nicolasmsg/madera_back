@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using ConceptionDevisWS.Models.Converters;
+using Newtonsoft.Json;
 
 namespace ConceptionDevisWS.Models
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(CulturalEnumStringConverter))]
     public enum EFillingKind
     {
         WoodenWool,

@@ -1,9 +1,12 @@
 ﻿using ConceptionDevisWS.Models;
 using ConceptionDevisWS.Models.Auth;
+using ConceptionDevisWS.Models.Converters;
 using ConceptionDevisWS.Services.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Principal;
@@ -22,11 +25,17 @@ namespace ConceptionDevisWS.Services
         /// Retrieve a <see cref="ConceptionDevisWS.Models.User"/>.
         /// </summary>
         /// <param name="id">the user's identity</param>
+        /// <param name="lang">the culture to get the user into (fr-FR or en-US)</param>
         /// <returns>the given user</returns>
         /// <exception cref="HttpResponseException">In case something went wront (for example the requested user doesn't exist).</exception>
-        public async static Task<User> GetUser(int id)
+        public async static Task<User> GetUser(int id, string lang)
 
         {
+            if(id == 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            CulturalEnumStringConverter.Culture = new CultureInfo(lang);
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 User seekedUser = await ctx.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -41,9 +50,11 @@ namespace ConceptionDevisWS.Services
         /// <summary>
         /// Retrieve all existing <see cref="ConceptionDevisWS.Models.User"/>s.
         /// </summary>
+        /// <param name="lang">the culture to get users into (fr-FR or en-US)</param>
         /// <returns>a list of users</returns>
-        public async static Task<IEnumerable<User>> GetAllUsers()
+        public async static Task<IEnumerable<User>> GetAllUsers(string lang)
         {
+            CulturalEnumStringConverter.Culture = new CultureInfo(lang);
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 return await ctx.Users.Include(u => u.Clients).ToListAsync<User>();
@@ -77,13 +88,16 @@ namespace ConceptionDevisWS.Services
         /// </summary>
         /// <param name="user">the user to log in</param>
         /// <param name="baseAddress">the host to log into</param>
+        /// <param name="lang">the culture to retrieve login info into (fr-FR or en-US)</param>
         /// <returns>a login object with credential headers and a User with its Clients</returns>
-        public async static Task<object> Login(User user, string baseAddress)
+        public async static Task<object> Login(User user, string baseAddress, string lang)
         {
             if(user == null || user.Password == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
+
+            CulturalEnumStringConverter.Culture = new CultureInfo(lang);
 
             string hashedPassword = HashManager.GetHash(user.Password);
             user.Password = hashedPassword;
@@ -145,19 +159,33 @@ namespace ConceptionDevisWS.Services
         /// </summary>
         /// <param name="id">the user's identity</param>
         /// <param name="newUser">the updated user</param>
+        /// <param name="lang">the culture to update this user into (fr-FR or en-US)</param>
         /// <returns>the updated user</returns>
         /// <exception cref="HttpResponseException">In case something went wront (for example the requested user doesn't exist).</exception>
-        public async static Task<User> UpdateUser(int id, User newUser)
+        public async static Task<User> UpdateUser(int id, User newUser, string lang)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                User seekedUser = await GetUser(id);
+                User seekedUser = await GetUser(id, lang);
                 ctx.Entry(seekedUser).State = EntityState.Modified;
                 ctx.Entry(seekedUser).Collection(u => u.Clients).EntityEntry.State = EntityState.Modified;
 
                 await ServiceHelper<User>.UpdateNavigationProperty<Client>(newUser, seekedUser, ctx, _getClients, _getCtxClients);
                 seekedUser.UpdateNonComposedPropertiesFrom(newUser);
-                await ctx.SaveChangesAsync();
+                bool updateSuccess = false;
+                do
+                {
+                    try
+                    {
+                        await ctx.SaveChangesAsync();
+                        updateSuccess = true;
+                    }
+                    catch (DbUpdateConcurrencyException dbuce)
+                    {
+                        DbEntityEntry entry = dbuce.Entries.Single();
+                        entry.OriginalValues.SetValues(await entry.GetDatabaseValuesAsync());
+                    }
+                } while (!updateSuccess);
                 return seekedUser;
             }
         }
@@ -171,7 +199,7 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                User seekedUser = await GetUser(id);
+                User seekedUser = await GetUser(id, "fr-FR");
                 ctx.Entry(seekedUser).State = EntityState.Deleted;
                 await ctx.SaveChangesAsync();
             }

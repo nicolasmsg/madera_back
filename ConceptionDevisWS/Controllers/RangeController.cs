@@ -16,25 +16,27 @@ namespace ConceptionDevisWS.Controllers
         /// <summary>
         /// Retrieve all existing <see cref="ConceptionDevisWS.Models.Range"/>s with their <see cref="ConceptionDevisWS.Models.Model"/>s.
         /// </summary>
+        /// <param name="lang">the culture to retrieve ranges for (fr-FR ou en-US)</param>
         /// <returns>a list of ranges</returns>
         [Authorize]
         [Route("api/ranges")]
-        public async Task<IEnumerable<Range>> GetAllRanges()
+        public async Task<IEnumerable<Range>> GetAllRanges([FromUri]string lang="fr-FR")
         {
-            return await RangeService.GetAllRanges();
+            return await RangeService.GetAllRanges(lang);
         }
 
         /// <summary>
         /// Retrieve the given <see cref="ConceptionDevisWS.Models.Range"/>.
         /// </summary>
         /// <param name="id">the range's identity</param>
+        /// /// <param name="lang">the culture to retrieve range for (fr-FR ou en-US)</param>
         /// <returns>the range</returns>
         /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested range does not exists).</exception>
         [Authorize]
         [Route("api/ranges/{id}")]
-        public async Task<Range> GetRange(int id)
+        public async Task<Range> GetRange(int id, [FromUri]string lang="fr-FR")
         {
-            return await RangeService.GetRange(id);
+            return await RangeService.GetRange(id, lang);
         }
 
         /// <summary>
@@ -57,28 +59,30 @@ namespace ConceptionDevisWS.Controllers
         /// </summary>
         /// <param name="id">the range's identity</param>
         /// <param name="newRange">the updated range to store</param>
+        /// <param name="lang">the culture to update Range into (fr-FR or en-US)</param>
         /// <returns>the updated range</returns>
         /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested range does not exists).</exception>
         [Authorize]
         [Route("api/ranges/{id}")]
         [AcceptVerbs("PUT")]
-        public async Task<Range> PutRange(int id, Range newRange)
+        public async Task<Range> PutRange(int id, Range newRange, [FromUri] string lang="fr-FR")
         {
-            return await RangeService.UpdateRange(id, newRange);
+            return await RangeService.UpdateRange(id, newRange, lang);
         }
 
         /// <summary>
         /// Create a new <see cref="ConceptionDevisWS.Models.Range"/>.
         /// </summary>
         /// <param name="newRange">the range to store</param>
+        /// <param name="lang">the culture to create the range into (fr-FR or en-US)</param>
         /// <returns>the stored range</returns>
         /// <exception cref="HttpResponseException">In case something went wrong (when the given range is null).</exception>
         [Authorize]
         [Route("api/ranges")]
         [AcceptVerbs("POST")]
-        public async Task<Range> PostRange(Range newRange)
+        public async Task<Range> PostRange(Range newRange, [FromUri]string lang="fr-FR")
         {
-            return await RangeService.CreateNew(newRange);
+            return await RangeService.CreateNew(newRange, lang);
         }
     }
 }

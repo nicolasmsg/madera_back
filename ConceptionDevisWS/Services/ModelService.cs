@@ -1,7 +1,10 @@
 ﻿using ConceptionDevisWS.Models;
+using ConceptionDevisWS.Models.Converters;
 using ConceptionDevisWS.Services.Utils;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -19,13 +22,14 @@ namespace ConceptionDevisWS.Services
         /// Retrieve a given <see cref="ConceptionDevisWS.Models.Range"/>'s <see cref="ConceptionDevisWS.Models.Model"/>s.
         /// </summary>
         /// <param name="rangeId">the range's identity</param>
+        /// <param name="lang">the culture to get the models into (fr-FR or en-US)</param>
         /// <returns>a list of models</returns>
         /// <exception cref="HttpResponseException">In case something went wrong (for example, when the given range does not exists).</exception>
-        public async static Task<List<Model>> GetRangeModels(int rangeId)
+        public async static Task<List<Model>> GetRangeModels(int rangeId, string lang)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                Range seekedRange = await _searchRange(rangeId);
+                Range seekedRange = await _searchRange(rangeId, lang);
                 return seekedRange.Models;
 
             }
@@ -36,11 +40,12 @@ namespace ConceptionDevisWS.Services
         /// </summary>
         /// <param name="rangeId">the range's identity</param>
         /// <param name="id">the model's identity</param>
+        /// <param name="lang">the culture to get the model into (fr-FR or en-US)</param>
         /// <returns>the model</returns>
         /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested range or model does not exists).</exception>
-        public async static Task<Model> GetRangeModel(int rangeId, int id)
+        public async static Task<Model> GetRangeModel(int rangeId, int id, string lang)
         {
-            return await _searchRangeModel(rangeId, id);
+            return await _searchRangeModel(rangeId, id, lang);
         }
 
         /// <summary>
@@ -53,7 +58,7 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                Model seekedModel = await _searchRangeModel(rangeId, id);
+                Model seekedModel = await _searchRangeModel(rangeId, id, "fr-FR");
                 ctx.Entry(seekedModel).State = EntityState.Deleted;
                 await ctx.SaveChangesAsync();
             }
@@ -65,9 +70,10 @@ namespace ConceptionDevisWS.Services
         /// <param name="rangeId">the range's identity</param>
         /// <param name="id">the model's identity</param>
         /// <param name="newModel">the updated model to store</param>
+        /// <param name="lang">the culture to update this range into (fr-FR or en-US)</param>
         /// <returns>the updated model</returns>
         /// <exception cref="HttpResponseException">In case something went wrong (for example, when the requested range or model does not exists).</exception>
-        public async static Task<Model> UpdateModel(int rangeId, int id, Model newModel)
+        public async static Task<Model> UpdateModel(int rangeId, int id, Model newModel, string lang)
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
@@ -84,12 +90,25 @@ namespace ConceptionDevisWS.Services
                     throw new HttpResponseException(responseMessage);
                 }
 
-                Model seekedModel = await _searchRangeModel(rangeId, id);
+                Model seekedModel = await _searchRangeModel(rangeId, id, lang);
                 ctx.Entry(seekedModel).State = EntityState.Modified;
                 await ServiceHelper<Model>.SetSingleNavigationProperty<Range>(newModel, seekedModel, ctx, m => m.Range, _getCtxRanges, _setRange);
 
                 seekedModel.UpdateNonComposedPropertiesFrom(newModel);
-                await ctx.SaveChangesAsync();
+
+                bool updateSuccess = true;
+                do
+                {
+                    try
+                    {
+                        await ctx.SaveChangesAsync();
+                        updateSuccess = true;
+                    } catch(DbUpdateConcurrencyException dbuce)
+                    {
+                        DbEntityEntry entry = dbuce.Entries.Single();
+                        entry.OriginalValues.SetValues(await entry.GetDatabaseValuesAsync());
+                    }
+                } while (!updateSuccess);
                 return seekedModel;
 
             }
@@ -100,15 +119,16 @@ namespace ConceptionDevisWS.Services
         /// </summary>
         /// <param name="rangeId">the range's identity</param>
         /// <param name="newModel">the model to store</param>
+        /// <param name="lang">the culture to create the model into (fr-FR or en-US)</param>
         /// <returns>the stored model</returns>
         /// <exception cref="HttpResponseException">In case something went wrong (when the given range does not exists or the model is null).</exception>
-        public async static Task<Model> CreateNew(int rangeId, Model newModel)
+        public async static Task<Model> CreateNew(int rangeId, Model newModel, string lang)
         {
             if (newModel == null || newModel.Name == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
-            Range seekedRange = await _searchRange(rangeId);
+            Range seekedRange = await _searchRange(rangeId, lang);
             newModel.Range = seekedRange;
 
             if (!await Validate(rangeId, newModel))
@@ -129,23 +149,24 @@ namespace ConceptionDevisWS.Services
 
         public async static Task<bool> Validate(int rangeId, Model model)
         {
-            Range range = await _searchRange(rangeId);
+            Range range = await _searchRange(rangeId, "fr-FR");
             return (model.FrameQuality & range.FrameQualities) == model.FrameQuality
                 && (model.ExtFinishing & range.ExtFinishings) == model.ExtFinishing;
         }
 
-        private async static Task<Range> _searchRange(int rangeId)
+        private async static Task<Range> _searchRange(int rangeId, string lang)
         {
-            return await RangeService.GetRange(rangeId);
+            return await RangeService.GetRange(rangeId, lang);
         }
 
-        private async static Task<Model> _searchRangeModel(int rangeId, int id)
+        private async static Task<Model> _searchRangeModel(int rangeId, int id, string lang)
         {
             if (id == 0)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-            Range seekedRange = await _searchRange(rangeId);
+            CulturalEnumStringConverter.Culture = new CultureInfo(lang);
+            Range seekedRange = await _searchRange(rangeId, lang);
             Model seekedModel = seekedRange.Models.FirstOrDefault(m => m.Id == id);
             if (seekedRange == null || seekedModel == null)
             {

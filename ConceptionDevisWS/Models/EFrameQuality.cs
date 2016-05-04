@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using ConceptionDevisWS.Models.Converters;
+using Newtonsoft.Json;
 using System;
 
 namespace ConceptionDevisWS.Models
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(CulturalEnumStringConverter))]
     [Flags]
     public enum EFrameQuality
     {

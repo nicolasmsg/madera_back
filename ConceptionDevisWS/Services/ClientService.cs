@@ -2,6 +2,8 @@
 using ConceptionDevisWS.Services.Utils;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -67,7 +69,7 @@ namespace ConceptionDevisWS.Services
                 Client seekedClient = await GetClient(id);
                 Client maderaClient = await ctx.Clients.FindAsync(1);
                 IEnumerable<Task> tasks = seekedClient.Projects.Select(p => {
-                    return ProjectService.SpecialUpdateProject(p.Client.Id, maderaClient.Id, p.Id, p);
+                    return ProjectService.SpecialUpdateProject(p.Client.Id, maderaClient.Id, p.Id, p, "fr-FR");
                 });
                 await Task.WhenAll(tasks);
                 ctx.Entry(seekedClient).Collection(c => c.Projects).EntityEntry.State = EntityState.Modified;
@@ -119,15 +121,30 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
+                bool updateSuccess = false;
                 Client seekedClient = await GetClient(id);
                 ctx.Entry(seekedClient).State = EntityState.Modified;
                 ctx.Entry(seekedClient).Collection(c => c.Projects).EntityEntry.State = EntityState.Modified;
                 ctx.Entry(seekedClient).Reference(c => c.User).EntityEntry.State = EntityState.Modified;
+                
 
                 await ServiceHelper<Client>.UpdateNavigationProperty<Project>(newClient, seekedClient, ctx, _getProjects, _getCtxProjects);
-                await ServiceHelper<Client>.SetSingleNavigationProperty<User>(newClient, seekedClient, ctx, c => c.User, _getCtxUsers, _setUser);
+
+
                 seekedClient.UpdateNonComposedPropertiesFrom(newClient);
-                await ctx.SaveChangesAsync();
+                do
+                {
+                    
+                    try
+                    {
+                        await ctx.SaveChangesAsync();
+                        updateSuccess = true;
+                    } catch(DbUpdateConcurrencyException dbuce)
+                    {
+                        DbEntityEntry entry = dbuce.Entries.Single();
+                        entry.OriginalValues.SetValues(await entry.GetDatabaseValuesAsync());
+                    }
+                } while (!updateSuccess);
                 return seekedClient;
        
             }

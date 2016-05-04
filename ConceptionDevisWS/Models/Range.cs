@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,6 +29,38 @@ namespace ConceptionDevisWS.Models
         public EFrameStructure FrameStructure { get; set; }
 
         public List<Model> Models { get; set; }
+
+        [NotMapped]
+        public IEnumerable<EFillingKind> AvailableFillings
+        {
+            get { return (EFillingKind[])Enum.GetValues(typeof(EFillingKind)); }
+        }
+
+        [NotMapped]
+        public IEnumerable<EExtFinishing> AvailableExtFinishings
+        {
+            get
+            {
+                EExtFinishing[] finishings = (EExtFinishing[])Enum.GetValues(typeof(EExtFinishing));
+                return Array.FindAll<EExtFinishing>(finishings, ef => ExtFinishings.HasFlag(ef));
+            }
+        }
+
+        [NotMapped]
+        public IEnumerable<EIntFinishing> AvailableIntFinishings
+        {
+            get { return (EIntFinishing[])Enum.GetValues(typeof(EIntFinishing)); }
+        }
+
+        [NotMapped]
+        public IEnumerable<EFrameQuality> AvailableFrameQualities
+        {
+            get
+            {
+                EFrameQuality[] frameQualities = (EFrameQuality[])Enum.GetValues(typeof(EFrameQuality));
+                return Array.FindAll<EFrameQuality>(frameQualities, fq => FrameQualities.HasFlag(fq));
+            }
+        }
 
         public void UpdateNonComposedPropertiesFrom(Range newRange)
         {

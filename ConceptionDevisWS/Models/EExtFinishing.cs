@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using ConceptionDevisWS.Models.Converters;
+using Newtonsoft.Json;
 using System;
 
 namespace ConceptionDevisWS.Models
 {
     [Flags]
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(CulturalEnumStringConverter))]
     public enum EExtFinishing
     {
         Wood=1,
