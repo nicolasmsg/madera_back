@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
@@ -79,6 +80,8 @@ namespace ConceptionDevisWS.Models
                 _client = new Client(_miniClient);
             }
         }
+
+        public List<Product> Products { get; set; }
 
         public Project() { }
         public Project(MiniProject miniProj, Client client)

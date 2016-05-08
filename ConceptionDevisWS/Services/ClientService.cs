@@ -47,7 +47,9 @@ namespace ConceptionDevisWS.Services
             }
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                Client client =  await ctx.Clients.Include( c => c.Projects ).FirstOrDefaultAsync( c => c.Id == id);
+                Client client =  await ctx.Clients
+                    .Include( c => c.Projects.Select( p => p.Products) )
+                    .FirstOrDefaultAsync( c => c.Id == id);
                 if(client == null)
                 {
                     throw new HttpResponseException(HttpStatusCode.NotFound);

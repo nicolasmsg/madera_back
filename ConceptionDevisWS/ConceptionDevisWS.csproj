@@ -107,6 +107,7 @@
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\ModelController.cs" />
     <Compile Include="Controllers\ModuleController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RangeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -195,6 +196,10 @@
     <Compile Include="Migrations\201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.Designer.cs">
       <DependentUpon>201604262049010_MadeFrameQualityAndExtFinishingsAsFlags.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605060859344_AddedProductsAndProjectProducts.cs" />
+    <Compile Include="Migrations\201605060859344_AddedProductsAndProjectProducts.Designer.cs">
+      <DependentUpon>201605060859344_AddedProductsAndProjectProducts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -215,6 +220,7 @@
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\ModelsDBContext.cs" />
     <Compile Include="Models\Module.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Range.cs" />
     <Compile Include="Models\User.cs" />
@@ -222,6 +228,7 @@
     <Compile Include="Services\ClientService.cs" />
     <Compile Include="Services\ModelService.cs" />
     <Compile Include="Services\ModuleService.cs" />
+    <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\RangeService.cs" />
     <Compile Include="Services\UserService.cs" />
@@ -246,6 +253,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <EmbeddedResource Include="Migrations\201605060859344_AddedProductsAndProjectProducts.resx">
+      <DependentUpon>201605060859344_AddedProductsAndProjectProducts.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Translations.en-US.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Translations.en-US.Designer.cs</LastGenOutput>

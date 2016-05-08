@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System;
 
 namespace ConceptionDevisWS.Services
 {
@@ -105,6 +106,11 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
+                if(newProject == null || newProject.Name == null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+                }
+
                 if (newProject.Client == null)
                 {
                     newProject.Client = new Client();
@@ -113,7 +119,9 @@ namespace ConceptionDevisWS.Services
 
                 Project seekedProject = await _searchClientProject(clientId, id, lang);
                 ctx.Entry(seekedProject).State = EntityState.Modified;
+                ctx.Entry(seekedProject).Collection(p => p.Products).EntityEntry.State = EntityState.Modified;
                 await ServiceHelper<Project>.SetSingleNavigationProperty<Client>(newProject, seekedProject, ctx, p => p.Client, _getCtxClients, _setClient);
+                await ServiceHelper<Project>.UpdateNavigationProperty<Product>(newProject, seekedProject, ctx, _getProducts, _getCtxProducts);
 
                 seekedProject.UpdateNonComposedPropertiesFrom(newProject);
                 bool updateSuccess = false;
@@ -132,6 +140,16 @@ namespace ConceptionDevisWS.Services
                 return seekedProject;
 
             }
+        }
+
+        private static DbSet<Product> _getCtxProducts(DbContext context)
+        {
+            return ((ModelsDBContext)context).Products;
+        }
+
+        private static ICollection<Product> _getProducts(Project project)
+        {
+            return project.Products;
         }
 
         /// <summary>
@@ -153,6 +171,11 @@ namespace ConceptionDevisWS.Services
                     newProject.Client = new Client();
                 }
                 newProject.Client.Id = newClientId;
+
+                if(newProject == null || newProject.Name == null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+                }
 
                 Project seekedProject = await _searchClientProject(originalClientId, id, lang);
                 ctx.Entry(seekedProject).State = EntityState.Modified;

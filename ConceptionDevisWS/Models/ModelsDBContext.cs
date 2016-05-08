@@ -24,6 +24,8 @@ namespace ConceptionDevisWS.Models
 
         public DbSet<Model> Models { get; set; }
 
+        public DbSet<Product> Products { get; set; }
+
         public ModelsDBContext() 
             :base("db")
         { }
