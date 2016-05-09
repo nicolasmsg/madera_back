@@ -1,10 +1,12 @@
 ﻿using ConceptionDevisWS.Models;
 using ConceptionDevisWS.Services.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -105,7 +107,8 @@ namespace ConceptionDevisWS.Services
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 await ServiceHelper<Client>.InitNavigationProperty<Project>(newClient, ctx, _getProjects, _getCtxProjects);
-                await ServiceHelper<Client>.LoadSingleNavigationProperty<User>(newClient, ctx, c => c.User, _getCtxUsers, _setUser);
+                List<Expression<Func<User, object>>> clientsExpr = new List<Expression<Func<User, object>>>();
+                await ServiceHelper<Client>.LoadSingleNavigationProperty<User>(newClient, ctx, c => c.User, _getCtxUsers, clientsExpr, _setUser);
                 ctx.Clients.Add(newClient);
                 await ctx.SaveChangesAsync();
                 return newClient;

@@ -9,6 +9,7 @@ using System.Net;
 using ConceptionDevisWS.Services.Utils;
 using ConceptionDevisWS.Models.Converters;
 using System.Globalization;
+using System.Linq.Expressions;
 
 namespace ConceptionDevisWS.Services
 {
@@ -52,7 +53,8 @@ namespace ConceptionDevisWS.Services
             CulturalEnumStringConverter.Culture = new CultureInfo(lang);
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                await ServiceHelper<Product>.LoadSingleNavigationProperty(newProduct, ctx, p => p.Model, _getCtxModels, _setModel);
+                List<Expression<Func<Model, object>>> rangesExpr = new List<Expression<Func<Model, object>>> { m => m.Range };
+                await ServiceHelper<Product>.LoadSingleNavigationProperty<Model>(newProduct, ctx, p => p.Model, _getCtxModels, rangesExpr, _setModel);
                 ctx.Products.Add(newProduct);
                 await ctx.SaveChangesAsync();
                 return newProduct;

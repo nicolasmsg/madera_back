@@ -1,11 +1,13 @@
 ﻿using ConceptionDevisWS.Models;
 using ConceptionDevisWS.Models.Converters;
 using ConceptionDevisWS.Services.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -92,7 +94,8 @@ namespace ConceptionDevisWS.Services
 
                 Model seekedModel = await _searchRangeModel(rangeId, id, lang);
                 ctx.Entry(seekedModel).State = EntityState.Modified;
-                await ServiceHelper<Model>.SetSingleNavigationProperty<Range>(newModel, seekedModel, ctx, m => m.Range, _getCtxRanges, _setRange);
+                List<Expression<Func<Range, object>>> modelsExpr = new List<Expression<Func<Range, object>>>();
+                await ServiceHelper<Model>.SetSingleNavigationProperty<Range>(newModel, seekedModel, ctx, m => m.Range, _getCtxRanges, modelsExpr, _setRange);
 
                 seekedModel.UpdateNonComposedPropertiesFrom(newModel);
 
@@ -140,7 +143,8 @@ namespace ConceptionDevisWS.Services
 
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                await ServiceHelper<Model>.LoadSingleNavigationProperty<Range>(newModel, ctx, m => m.Range, _getCtxRanges, _setRange);
+                List<Expression<Func<Range, object>>> modelsExpr = new List<Expression<Func<Range, object>>>();
+                await ServiceHelper<Model>.LoadSingleNavigationProperty<Range>(newModel, ctx, m => m.Range, _getCtxRanges, modelsExpr, _setRange);
                 ctx.Models.Add(newModel);
                 await ctx.SaveChangesAsync();
                 return newModel;

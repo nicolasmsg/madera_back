@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace ConceptionDevisWS.Models
 {
@@ -28,7 +31,44 @@ namespace ConceptionDevisWS.Models
         [Column("ConceptionOssature")]
         public EFrameStructure FrameStructure { get; set; }
 
+        [IgnoreDataMember, XmlIgnore, JsonIgnore]
         public List<Model> Models { get; set; }
+
+        [NotMapped]
+        [JsonProperty("Models")]
+        public List<MiniModel> MiniModels
+        {
+            get
+            {
+                if (Models == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return Models.ConvertAll<MiniModel>(m => new MiniModel(m));
+                }
+            }
+            set
+            {
+                if (value != null)
+                {
+                    if (Models == null)
+                    {
+                        Models = new List<Model>();
+                    }
+                    Models.Clear();
+                    foreach (MiniModel miniModel in value)
+                    {
+                        Models.Add(new Model(miniModel, this));
+                    }
+                }
+                else
+                {
+                    Models = null;
+                }
+            }
+        }
 
         [NotMapped]
         public IEnumerable<EFillingKind> AvailableFillings

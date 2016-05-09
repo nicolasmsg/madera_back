@@ -87,9 +87,10 @@ namespace ConceptionDevisWS.Services.Utils
         /// <param name="context">the storage context</param>
         /// <param name="singlePropExpr">a function used to retrieve the associated property from the source</param>
         /// <param name="getCtxSingleProp">a function to retrieve the associated property from the storage context</param>
+        /// <param name="includes">a list of expressions to retrieve related property from the entity <typeparamref name="T2"/></param>
         /// <param name="setSingleProp">a function to define the associated property on the source</param>
         public async static Task LoadSingleNavigationProperty<T2>(T src, DbContext context,
-            Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, Action<T, T2> setSingleProp)
+            Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, IEnumerable<Expression<Func<T2, object>>>includes, Action<T, T2> setSingleProp)
             where T2 :class, IIdentifiable
         {
             Func<T, T2> getSingleProp = singlePropExpr.Compile();
@@ -97,7 +98,12 @@ namespace ConceptionDevisWS.Services.Utils
             T2 srcProperty = getSingleProp(src);
             if (srcProperty != null)
             {
-                T2 trackedProperty = await getCtxSingleProp(context).FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
+                DbSet<T2> ctxProps = getCtxSingleProp(context);
+                foreach(Expression<Func<T2,object>> expr in includes)
+                {
+                    ctxProps.Include(expr);
+                }
+                T2 trackedProperty = await ctxProps.FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
                 context.Entry(trackedProperty).State = EntityState.Unchanged;
                 setSingleProp(src, trackedProperty);
             }
@@ -112,9 +118,10 @@ namespace ConceptionDevisWS.Services.Utils
         /// <param name="context">the storage context</param>
         /// <param name="singlePropExpr">a function used to retrieve the associated property from the source</param>
         /// <param name="getCtxSingleProp">a function to retrieve the associated property from the storage context</param>
+        /// <param name="includes">a list of expressions to retrieve related property from the entity <typeparamref name="T2"/></param>
         /// <param name="setSingleProp">a function to define the associated property on the source</param>
         public async static Task SetSingleNavigationProperty<T2>(T src, T dest, DbContext context,
-          Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, Action<T, T2> setSingleProp)
+          Expression<Func<T, T2>> singlePropExpr, Func<DbContext, DbSet<T2>> getCtxSingleProp, IEnumerable<Expression<Func<T2, object>>> includes, Action<T, T2> setSingleProp)
             where T2 : class, IIdentifiable
         {
             Func<T, T2> getSingleProp = singlePropExpr.Compile();
@@ -122,7 +129,12 @@ namespace ConceptionDevisWS.Services.Utils
             T2 srcProperty = getSingleProp(src);
             if (srcProperty != null)
             {
-                T2 trackedProperty = await getCtxSingleProp(context).FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
+                DbSet<T2> ctxProps = getCtxSingleProp(context);
+                foreach(Expression<Func<T2, object>> expr in includes)
+                {
+                    ctxProps.Include(expr);
+                }
+                T2 trackedProperty = await ctxProps.FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
                 context.Entry(trackedProperty).State = EntityState.Unchanged;
                 setSingleProp(dest, trackedProperty);
             } else

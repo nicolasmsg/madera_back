@@ -216,6 +216,7 @@
     <Compile Include="Models\EProjectState.cs" />
     <Compile Include="Models\IIdentifiable.cs" />
     <Compile Include="Models\MiniClient.cs" />
+    <Compile Include="Models\MiniModel.cs" />
     <Compile Include="Models\MiniProject.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\ModelsDBContext.cs" />

@@ -9,23 +9,29 @@ namespace ConceptionDevisWS.Models
     [Table("Modele")]
     public class Model : IIdentifiable
     {
+        public Model() { }
+
+        public Model(MiniModel miniModel, Range range)
+        {
+            Name = miniModel.Name;
+            Filling = miniModel.Filling;
+            IntFinishing = miniModel.IntFinishing;
+            ExtFinishing = miniModel.ExtFinishing;
+            FrameQuality = miniModel.FrameQuality;
+            ImagePath = miniModel.ImagePath;
+            BasePricePercentage = miniModel.BasePricePercentage;
+            Range = range;
+        }
+
         public int Id { get; set; }
 
         public string Reference
         {
             get { return "MODE-" + Id; }
         }
-
-        [IgnoreDataMember,XmlIgnore,JsonIgnore]
+        
         [Required]
         public Range Range { get; set; }
-
-        [NotMapped]
-        [JsonProperty("Range")]
-        public string RangeStr
-        {
-            get { return Range.Name; }
-        }
 
         [Column("Nom")]
         [StringLength(50)]

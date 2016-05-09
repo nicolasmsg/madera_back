@@ -24,12 +24,15 @@ namespace ConceptionDevisWS.Models.Converters
             string[] names = Enum.GetNames(objectType);
             for (int i = 0; i < names.Length; i++)
             {
-                string[] parts = existingValue.ToString().Split(',');
+                string[] parts = reader.Value.ToString().Split(',');
                 string enumValues = null;
                 for(int j=0; j< parts.Length; j++)
                 {
                     string val = parts[j].Trim();
-                    string enumValidValue = Array.Find<string>(names, s => s.Equals(val, StringComparison.InvariantCultureIgnoreCase));
+                    string enumValidValue = Array.Find<string>(names, 
+                        s => Translations.ResourceManager.GetString
+                        ("Enums_" + objectType.Name + "_"+ s).Equals(val, StringComparison.InvariantCultureIgnoreCase)
+                    );
                     if(enumValidValue != null)
                     {
                         if(j==0)
