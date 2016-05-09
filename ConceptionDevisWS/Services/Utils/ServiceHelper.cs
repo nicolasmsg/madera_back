@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
@@ -99,11 +100,12 @@ namespace ConceptionDevisWS.Services.Utils
             if (srcProperty != null)
             {
                 DbSet<T2> ctxProps = getCtxSingleProp(context);
+                IQueryable<T2> queryableCtxProps = ctxProps;
                 foreach(Expression<Func<T2,object>> expr in includes)
                 {
-                    ctxProps.Include(expr);
+                    queryableCtxProps = queryableCtxProps.Include(expr);
                 }
-                T2 trackedProperty = await ctxProps.FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
+                T2 trackedProperty = await queryableCtxProps.FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
                 context.Entry(trackedProperty).State = EntityState.Unchanged;
                 setSingleProp(src, trackedProperty);
             }
@@ -130,11 +132,12 @@ namespace ConceptionDevisWS.Services.Utils
             if (srcProperty != null)
             {
                 DbSet<T2> ctxProps = getCtxSingleProp(context);
+                IQueryable<T2> queryableCtxProps = ctxProps;
                 foreach(Expression<Func<T2, object>> expr in includes)
                 {
-                    ctxProps.Include(expr);
+                    queryableCtxProps = queryableCtxProps.Include(expr);
                 }
-                T2 trackedProperty = await ctxProps.FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
+                T2 trackedProperty = await queryableCtxProps.FirstOrDefaultAsync(prop => prop.Id == srcProperty.Id);
                 context.Entry(trackedProperty).State = EntityState.Unchanged;
                 setSingleProp(dest, trackedProperty);
             } else

@@ -11,6 +11,8 @@ namespace ConceptionDevisWS.Models
 {
     public class Client : IIdentifiable
     {
+
+        private List<Project> _projects = new List<Project>();
         public int Id { get; set; }
         [StringLength(50), Index(IsUnique=true)]
         public string Reference
@@ -39,7 +41,11 @@ namespace ConceptionDevisWS.Models
         [Column("DateDeNaissance")]
         public DateTime Birdthdate { get; set; }
         [IgnoreDataMember,XmlIgnore,JsonIgnore]
-        public List<Project> Projects { get; set; }
+        public List<Project> Projects
+        {
+            get { return _projects; }
+            set { _projects = value; }
+        }
 
         [IgnoreDataMember, XmlIgnore, JsonIgnore]
         public User User { get; set; }
@@ -52,32 +58,13 @@ namespace ConceptionDevisWS.Models
         {
             get
             {
-                if (Projects == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return Projects.ConvertAll<MiniProject>(p => new MiniProject(p));
-                }
+                return _projects.ConvertAll<MiniProject>(p => new MiniProject(p));
             } 
             set
             {
                 if (value != null)
                 {
-                    if(Projects == null)
-                    {
-                        Projects = new List<Project>();
-                    }
-                    Projects.Clear();
-                    foreach(MiniProject miniProj in value)
-                    {
-                        Projects.Add(new Project(miniProj, this));
-                    }
-                }
-                else
-                {
-                    Projects = null;
+                    _projects = value.ConvertAll<Project>(mp => new Project(mp, this));
                 }
             }
         }

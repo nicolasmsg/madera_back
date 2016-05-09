@@ -23,6 +23,8 @@
 
         public double BasePricePercentage { get; set; }
 
+        public MiniModel() { }
+
         public MiniModel(Model model)
         {
             Id = model.Id;
@@ -33,6 +35,7 @@
             FrameQuality = model.FrameQuality;
             ImagePath = model.ImagePath;
             BasePricePercentage = model.BasePricePercentage;
+
         }
     }
 }

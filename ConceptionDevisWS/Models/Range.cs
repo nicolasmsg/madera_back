@@ -11,6 +11,7 @@ namespace ConceptionDevisWS.Models
     [Table("Gamme")]
     public class Range : IIdentifiable
     {
+        private List<Model> _models = new List<Model>();
         public int Id { get; set; }
 
         [Column("Nom")]
@@ -32,7 +33,11 @@ namespace ConceptionDevisWS.Models
         public EFrameStructure FrameStructure { get; set; }
 
         [IgnoreDataMember, XmlIgnore, JsonIgnore]
-        public List<Model> Models { get; set; }
+        public List<Model> Models
+        {
+            get { return _models; }
+            set { _models = value; }
+        }
 
         [NotMapped]
         [JsonProperty("Models")]
@@ -40,32 +45,13 @@ namespace ConceptionDevisWS.Models
         {
             get
             {
-                if (Models == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return Models.ConvertAll<MiniModel>(m => new MiniModel(m));
-                }
+                return _models.ConvertAll<MiniModel>(m => new MiniModel(m));
             }
             set
             {
                 if (value != null)
                 {
-                    if (Models == null)
-                    {
-                        Models = new List<Model>();
-                    }
-                    Models.Clear();
-                    foreach (MiniModel miniModel in value)
-                    {
-                        Models.Add(new Model(miniModel, this));
-                    }
-                }
-                else
-                {
-                    Models = null;
+                    _models = value.ConvertAll<Model>(m => new Model(m, this));
                 }
             }
         }

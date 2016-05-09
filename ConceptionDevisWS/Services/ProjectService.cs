@@ -122,9 +122,12 @@ namespace ConceptionDevisWS.Services
                 Project seekedProject = await _searchClientProject(clientId, id, lang);
                 ctx.Entry(seekedProject).State = EntityState.Modified;
                 ctx.Entry(seekedProject).Collection(p => p.Products).EntityEntry.State = EntityState.Modified;
-                List<Expression<Func<Client, object>>> usersExpr = new List<Expression<Func<Client, object>>> ();
-                await ServiceHelper<Project>.SetSingleNavigationProperty<Client>(newProject, seekedProject, ctx, p => p.Client, _getCtxClients, usersExpr, _setClient);
+                List<Expression<Func<Client, object>>> clientInfosExpr = new List<Expression<Func<Client, object>>> {
+                    
+                };
+                await ServiceHelper<Project>.SetSingleNavigationProperty<Client>(newProject, seekedProject, ctx, p => p.Client, _getCtxClients, clientInfosExpr, _setClient);
                 await ServiceHelper<Project>.UpdateNavigationProperty<Product>(newProject, seekedProject, ctx, _getProducts, _getCtxProducts);
+                
 
                 seekedProject.UpdateNonComposedPropertiesFrom(newProject);
                 bool updateSuccess = false;
@@ -205,7 +208,9 @@ namespace ConceptionDevisWS.Services
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
             Client seekedClient = await _searchClient(clientId, lang);
-            Project seekedProject = seekedClient.Projects.FirstOrDefault(p => p.Id == id);
+            Project seekedProject = seekedClient
+                .Projects
+                .FirstOrDefault(p => p.Id == id);
             if(seekedClient == null || seekedProject == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

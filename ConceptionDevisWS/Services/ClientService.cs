@@ -50,7 +50,9 @@ namespace ConceptionDevisWS.Services
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
                 Client client =  await ctx.Clients
-                    .Include( c => c.Projects.Select( p => p.Products) )
+                    .Include( c => c.Projects.Select( 
+                        p => p.Products.Select(prod => prod.Model.Range )
+                    ))
                     .FirstOrDefaultAsync( c => c.Id == id);
                 if(client == null)
                 {
