@@ -29,6 +29,9 @@ namespace ConceptionDevisWS.Models
         [IgnoreDataMember, XmlIgnore,JsonIgnore]
         public List<Module> Modules { get; set; }
 
+        [Column("Prix")]
+        public double Price { get; set; }
+
         [Column("Angle")]
         [IgnoreDataMember,XmlIgnore,JsonIgnore]
         public string AngleStr

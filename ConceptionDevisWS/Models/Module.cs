@@ -17,6 +17,9 @@ namespace ConceptionDevisWS.Models
         public string Name { get; set; }
         public List<Component> Components { get; set; }
 
+        [Column("Prix")]
+        public double Price { get; set; }
+
         public void UpdateNonComposedPropertiesFrom(Module newModule)
         {
             Name = newModule.Name;

@@ -94,8 +94,10 @@ namespace ConceptionDevisWS.Services
 
                 Model seekedModel = await _searchRangeModel(rangeId, id, lang);
                 ctx.Entry(seekedModel).State = EntityState.Modified;
+                ctx.Entry(seekedModel).Collection(m => m.Modules).EntityEntry.State = EntityState.Modified;
                 List<Expression<Func<Range, object>>> modelsExpr = new List<Expression<Func<Range, object>>>();
                 await ServiceHelper<Model>.SetSingleNavigationProperty<Range>(newModel, seekedModel, ctx, m => m.Range, _getCtxRanges, modelsExpr, _setRange);
+                await ServiceHelper<Model>.UpdateNavigationProperty<Module>(newModel, seekedModel, ctx, _getModules, _getCtxModules);
 
                 seekedModel.UpdateNonComposedPropertiesFrom(newModel);
 
@@ -116,6 +118,7 @@ namespace ConceptionDevisWS.Services
 
             }
         }
+        
 
         /// <summary>
         /// Create a new <see cref="ConceptionDevisWS.Models.Model"/> for an existing <see cref="ConceptionDevisWS.Models.Range"/>.
@@ -187,6 +190,16 @@ namespace ConceptionDevisWS.Services
         private static void _setRange(Model m, Range r)
         {
             m.Range = r;
+        }
+
+        private static DbSet<Module> _getCtxModules(DbContext context)
+        {
+            return ((ModelsDBContext)context).Modules;
+        }
+
+        private static ICollection<Module> _getModules(Model model)
+        {
+            return model.Modules;
         }
     }
 }

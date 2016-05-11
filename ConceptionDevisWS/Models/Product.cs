@@ -26,6 +26,13 @@ namespace ConceptionDevisWS.Models
         [Column("CheminPlan")]
         public string SchemaPath { get; set; }
 
+        [Column("DonneesGraphiques")]
+        [StringLength(4000)]
+        public string Graphic { get; set; }
+
+        [Column("Prix")]
+        public double Price { get; set; }
+
         public void UpdateNonComposableProperties(Product newProduct)
         {
             Name = newProduct.Name;

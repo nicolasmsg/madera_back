@@ -200,6 +200,14 @@
     <Compile Include="Migrations\201605060859344_AddedProductsAndProjectProducts.Designer.cs">
       <DependentUpon>201605060859344_AddedProductsAndProjectProducts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605111929513_ProductPriceAndGraphicsData.cs" />
+    <Compile Include="Migrations\201605111929513_ProductPriceAndGraphicsData.Designer.cs">
+      <DependentUpon>201605111929513_ProductPriceAndGraphicsData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605111957579_AddedPricesAndAddedModulesToModels.cs" />
+    <Compile Include="Migrations\201605111957579_AddedPricesAndAddedModulesToModels.Designer.cs">
+      <DependentUpon>201605111957579_AddedPricesAndAddedModulesToModels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Auth\RevokedToken.cs" />
     <Compile Include="Models\Client.cs" />
@@ -256,6 +264,12 @@
     <Content Include="packages.config" />
     <EmbeddedResource Include="Migrations\201605060859344_AddedProductsAndProjectProducts.resx">
       <DependentUpon>201605060859344_AddedProductsAndProjectProducts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605111929513_ProductPriceAndGraphicsData.resx">
+      <DependentUpon>201605111929513_ProductPriceAndGraphicsData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605111957579_AddedPricesAndAddedModulesToModels.resx">
+      <DependentUpon>201605111957579_AddedPricesAndAddedModulesToModels.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Translations.en-US.resx">
       <Generator>ResXFileCodeGenerator</Generator>

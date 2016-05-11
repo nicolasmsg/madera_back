@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
@@ -54,6 +55,8 @@ namespace ConceptionDevisWS.Models
 
         [Column("PourcentagePrixBase")]
         public double BasePricePercentage { get; set; }
+
+        public List<Module> Modules { get; set; }
 
         public void UpdateNonComposedPropertiesFrom(Model newModel)
         {
