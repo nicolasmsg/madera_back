@@ -52,7 +52,10 @@ namespace ConceptionDevisWS.Services
                 Client client =  await ctx.Clients
                     .Include( c => c.Projects.Select( 
                         p => p.Products.Select(prod => prod.Model.Range )
-                    ))
+                    )). Include( c => c.Projects.Select(
+                        p => p.Products.Select( prod => prod.Model.Modules) 
+                        ))
+                        .Include( c => c.Projects.Select(p => p.Products.Select(prod => prod.Model.Modules ) ))
                     .FirstOrDefaultAsync( c => c.Id == id);
                 if(client == null)
                 {

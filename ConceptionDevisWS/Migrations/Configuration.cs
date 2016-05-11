@@ -233,7 +233,19 @@ namespace ConceptionDevisWS.Migrations
             };
 
             context.Models.AddOrUpdate(maison3ChSdb, villaAvecTerrasse, maison2ChJardin, chalet2Ch, abrisMontagnard, villaAvecPiscine, creche, localProCrea, localProDesign);
-            
+
+            Module porteRenforcee = new Module { Id=1, Name="Porte Renforcee", Price=4};
+            Module fenetreRonde = new Module { Id =2,  Name = "Fenêtre Ronde", Price = 4 };
+            Module fenetreOuverte = new Module { Id =3, Name = "Fenêtre Ouverte", Price = 4 };
+            Module palissade = new Module { Id = 4, Name = "Palissade", Price = 4 };
+            Module decorationInt = new Module { Id =5, Name = "Decoration Int 1", Price = 4 };
+            Module archeVoute = new Module { Id =6, Name = "Arche Voute", Price = 4 };
+
+            maison3ChSdb.Modules.AddRange(new Module[] { fenetreRonde, fenetreOuverte, palissade });
+            maison2ChJardin.Modules.AddRange(new Module[] { decorationInt, archeVoute });
+            villaAvecTerrasse.Modules.AddRange(new Module[] {  porteRenforcee });
+
+            context.Modules.AddOrUpdate(porteRenforcee, fenetreRonde, fenetreOuverte, palissade, decorationInt, archeVoute);
             
         }
 
