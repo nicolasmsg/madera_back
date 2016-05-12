@@ -53,7 +53,15 @@ namespace ConceptionDevisWS.Services
             CulturalEnumStringConverter.Culture = new CultureInfo(lang);
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                List<Expression<Func<Model, object>>> rangesExpr = new List<Expression<Func<Model, object>>> { m => m.Range };
+                if(newProduct.Graphic != null && newProduct.Graphic.Length > 4000)
+                {
+                    newProduct.Graphic = "";
+                }
+
+                List<Expression<Func<Model, object>>> rangesExpr = new List<Expression<Func<Model, object>>> {
+                    m => m.Range,
+                    m => m.Modules.Select( mod => mod.Components)
+                };
                 await ServiceHelper<Product>.LoadSingleNavigationProperty<Model>(newProduct, ctx, p => p.Model, _getCtxModels, rangesExpr, _setModel);
                 ctx.Products.Add(newProduct);
                 await ctx.SaveChangesAsync();
