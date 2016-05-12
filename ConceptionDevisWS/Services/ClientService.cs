@@ -55,7 +55,7 @@ namespace ConceptionDevisWS.Services
                     )). Include( c => c.Projects.Select(
                         p => p.Products.Select( prod => prod.Model.Modules) 
                         ))
-                        .Include( c => c.Projects.Select(p => p.Products.Select(prod => prod.Model.Modules ) ))
+                        .Include( c => c.Projects.Select(p => p.Products.Select(prod => prod.Model.Modules.Select(mod => mod.Components) ) ))
                     .FirstOrDefaultAsync( c => c.Id == id);
                 if(client == null)
                 {

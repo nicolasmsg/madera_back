@@ -23,6 +23,7 @@ namespace ConceptionDevisWS.Models
         public void UpdateNonComposedPropertiesFrom(Module newModule)
         {
             Name = newModule.Name;
+            Price = newModule.Price;
         }
     }
 }
