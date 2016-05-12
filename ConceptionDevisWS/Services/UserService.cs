@@ -210,7 +210,8 @@ namespace ConceptionDevisWS.Services
         {
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                return await ctx.Users.Include(u => u.Clients.Select(c => c.Projects) )
+                return await ctx.Users.Include(u => u.Clients.Select(c => c.Projects.Select( proj => proj.Products
+                .Select(prod => prod.Model)) ))
                     .FirstOrDefaultAsync(u => u.Login.Equals(login, StringComparison.InvariantCultureIgnoreCase));
             }
         }

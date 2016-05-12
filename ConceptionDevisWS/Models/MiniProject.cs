@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ConceptionDevisWS.Models
 {
@@ -13,6 +14,8 @@ namespace ConceptionDevisWS.Models
         public EProjectState State { get; set; }
         public DateTime CreationDate { get; set; }
         public string TechnicalSheetPath { get; set; }
+
+        public List<Product> Products { get; set; }
 
         public MiniProject() { }
 

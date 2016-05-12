@@ -37,6 +37,7 @@ namespace ConceptionDevisWS.Models
         {
             Name = newProduct.Name;
             SchemaPath = newProduct.SchemaPath;
+            Graphic = newProduct.Graphic;
         }
     }
 }

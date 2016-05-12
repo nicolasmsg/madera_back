@@ -58,7 +58,11 @@ namespace ConceptionDevisWS.Models
         {
             get
             {
-                return _projects.ConvertAll<MiniProject>(p => new MiniProject(p));
+                return _projects.ConvertAll<MiniProject>(p => {
+                    MiniProject miniProj = new MiniProject(p);
+                    miniProj.Products = new List<Product>(p.Products);
+                    return miniProj;
+                });
             } 
             set
             {
