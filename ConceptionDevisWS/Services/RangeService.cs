@@ -27,7 +27,10 @@ namespace ConceptionDevisWS.Services
             CulturalEnumStringConverter.Culture = new CultureInfo(lang);
             using (ModelsDBContext ctx = new ModelsDBContext())
             {
-                return await ctx.Ranges.Include( r => r.Models ).ToListAsync<Range>();
+                return await ctx.Ranges.Include( 
+                    r => r.Models)
+                    .Include(r => r.Models.Select(m => m.Modules.Select(mod => mod.Components)))
+                    .ToListAsync<Range>();
             }
         }
 

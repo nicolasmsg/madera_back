@@ -45,7 +45,11 @@ namespace ConceptionDevisWS.Models
         {
             get
             {
-                return _models.ConvertAll<MiniModel>(m => new MiniModel(m));
+                return _models.ConvertAll<MiniModel>(m => {
+                    MiniModel miniMod = new MiniModel(m);
+                    miniMod.Modules = new List<Module>(m.Modules);
+                    return miniMod;
+                });
             }
             set
             {

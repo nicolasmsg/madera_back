@@ -1,4 +1,6 @@
-﻿namespace ConceptionDevisWS.Models
+﻿using System.Collections.Generic;
+
+namespace ConceptionDevisWS.Models
 {
     public class MiniModel
     {
@@ -22,6 +24,8 @@
         public string ImagePath { get; set; }
 
         public double BasePricePercentage { get; set; }
+
+        public List<Module> Modules { get; set; }
 
         public MiniModel() { }
 
