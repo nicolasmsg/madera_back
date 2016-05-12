@@ -128,9 +128,13 @@ namespace ConceptionDevisWS.Services
                 await ServiceHelper<Project>.SetSingleNavigationProperty<Client>(newProject, seekedProject, ctx, p => p.Client, _getCtxClients, clientInfosExpr, _setClient);
                 await ServiceHelper<Project>.UpdateNavigationProperty<Product>(newProject, seekedProject, ctx, _getProducts, _getCtxProducts);
                 
-                foreach(Product seekedProduct in seekedProject.Products)
+                foreach(Product newProduct in newProject.Products)
                 {
-                    seekedProduct.UpdateNonComposableProperties(newProject.Products.First(newP => newP.Id == seekedProduct.Id));
+                    Product currentProduct = seekedProject.Products.Find(prod => prod.Id == newProduct.Id);
+                    if (currentProduct != null)
+                    {
+                        currentProduct.UpdateNonComposableProperties(newProduct);
+                    }
                 }
 
                 seekedProject.UpdateNonComposedPropertiesFrom(newProject);
